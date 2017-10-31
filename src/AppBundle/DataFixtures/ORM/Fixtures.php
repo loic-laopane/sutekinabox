@@ -60,13 +60,6 @@ class Fixtures extends Fixture
             $product->setReference('ref'.$i);
             $product->setPrice(mt_rand(10, 100));
 
-            $key = rand(1, count($supplier_list)-1);
-
-            $supplier = $supplier_list[$key];
-
-            $product->addSupplier($supplier);
-
-
             $manager->persist($product);
         }
 

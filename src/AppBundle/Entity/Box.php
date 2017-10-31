@@ -39,6 +39,7 @@ class Box
      * @var array
      *
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Product")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $products;
 

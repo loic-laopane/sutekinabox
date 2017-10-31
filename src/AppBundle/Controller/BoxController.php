@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Box;
+use AppBundle\Services\BoxManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +18,7 @@ class BoxController extends Controller
     /**
      * Lists all box entities.
      *
-     * @Route("/list", name="box_list")
+     * @Route("/", name="box_list")
      * @Method("GET")
      */
     public function indexAction()
@@ -37,16 +38,15 @@ class BoxController extends Controller
      * @Route("/new", name="box_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function newAction(Request $request, BoxManager $boxManager)
     {
         $box = new Box();
         $form = $this->createForm('AppBundle\Form\BoxType', $box);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($box);
-            $em->flush();
+            $boxManager->insert($box);
+
 
             return $this->redirectToRoute('box_show', array('id' => $box->getId()));
         }
@@ -110,12 +110,11 @@ class BoxController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($box);
-            $em->flush();
+            $manager = $this->get('app.box_manager');
+            $manager->delete($box);
         }
 
-        return $this->redirectToRoute('box_index');
+        return $this->redirectToRoute('box_list');
     }
 
     /**

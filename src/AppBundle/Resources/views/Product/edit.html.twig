@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Product edit</h1>
+
+    {{ form_start(edit_form) }}
+        {{ form_widget(edit_form) }}
+        <input type="submit" value="{{ 'btn.edit' | trans }}" class="btn btn-success" />
+        <a href="{{ path('product_list') }}" class="btn btn-default" >{{  'btn.back_to_list' | trans }}</a>
+
+    {{ form_end(edit_form) }}
+    {{ form_start(delete_form) }}
+    <input type="submit" value="{{ 'btn.delete' | trans }}" class="btn btn-danger">
+    {{ form_end(delete_form) }}
+
+{% endblock %}

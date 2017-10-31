@@ -57,7 +57,7 @@ framework:
                     from: provisionned
                     to:   completed
                 unvailable:
-                    from: [created, requested, provisionning]
+                    from: [created, requested, provisionned]
                     to: unvailable
 
 
@@ -69,13 +69,12 @@ framework:
             supports:
                 - AppBundle\Entity\Box
             places:
-                - in_stock
+                - available
                 - out_of_stock
                 - requested
                 - purshased
                 - shipped
-                - reshipped
-                - repairing
+                - remplacing
                 - received
                 - ok
                 - nok
@@ -83,19 +82,19 @@ framework:
                 - ready
             transitions:
                 out_of_stock:
-                    from: [in_stock, repairing]
+                    from: [available, remplacing]
                     to: out_of_stock
                 stock:
                     from: out_of_stock
-                    to: in_stock
+                    to: available
                 request:
-                    from: in_stock
+                    from: available
                     to:   requested
                 purchase:
                     from: requested
                     to:   purshased
                 shipment:
-                    from: [purshased, repairing]
+                    from: [purshased, remplacing]
                     to:   shipped
                 receipt:
                     from: shipped
@@ -112,9 +111,9 @@ framework:
                 back_to_supplier:
                     from: nok
                     to: back_to_supplier
-                maintenance:
+                replace:
                     from: back_to_supplier
-                    to: repairing
+                    to: remplacing
                 complete:
                     from: ok
                     to:   ready

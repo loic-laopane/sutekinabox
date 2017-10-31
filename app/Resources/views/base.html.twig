@@ -19,6 +19,14 @@
     <body>
     <div class="container">
         {% include 'AppBundle:Menu:menu.html.twig' %}
+        {% set errors =  app.session.flashbag.all() %}
+        {% for type, arr in errors %}
+            <div class="alert alert-{{ type }}">
+                {% for message in arr %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </div>
+        {% endfor %}
 
         {% block body %}{% endblock %}
     </div>

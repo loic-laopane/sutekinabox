@@ -6,6 +6,10 @@ menu:
         title: Boxes
         new: Créez votre box
         list: Toutes les boxes
+    product:
+        title: Produits
+        new: Ajouter un produit
+        list: Tous les produits
 
 login:
     username: Identifiant
@@ -27,3 +31,16 @@ btn:
     new: Nouveau
     create: Créer
     back_to_list: Retour à la liste
+
+
+available: Disponible
+requested: Demande en cours
+out_of_stock: Rupture
+purshased: Commandé
+shipped: En cours de livraison
+remplacing: En remplacement
+received: Reçu
+ok: Conforme
+nok: Non conforme
+back_to_supplier: Retour fournisseur
+ready: Prêt pour conditionnement

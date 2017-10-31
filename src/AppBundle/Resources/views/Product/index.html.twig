@@ -1,25 +1,29 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Boxes list</h1>
-    {% if boxes|length > 0 %}
+    <h1>Products list</h1>
+
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Name</th>
+                <th>Label</th>
+                <th>Reference</th>
+                <th>Description</th>
+                <th>Price</th>
                 <th>State</th>
-                <th>Budget</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for box in boxes %}
+        {% for product in products %}
             <tr>
-                <td><a href="{{ path('box_show', { 'id': box.id }) }}">{{ box.id }}</a></td>
-                <td>{{ box.name }}</td>
-                <td>{{ box.state }}</td>
-                <td>{{ box.budget }}</td>
+                <td><a href="{{ path('product_show', { 'id': product.id }) }}">{{ product.id }}</a></td>
+                <td>{{ product.label }}</td>
+                <td>{{ product.reference }}</td>
+                <td>{{ product.description }}</td>
+                <td>{{ product.price }}</td>
+                <td>{{ product.state | trans}}</td>
                 <td>
                     <!-- Split button -->
                     <div class="btn-group">
@@ -29,8 +33,8 @@
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a href="{{ path('box_show', { 'id': box.id }) }}">{{ 'btn.show' | trans }}</a></li>
-                            <li> <a href="{{ path('box_edit', { 'id': box.id }) }}">{{ 'btn.edit' | trans }}</a></li>
+                            <li><a href="{{ path('product_show', { 'id': product.id }) }}">{{ 'btn.show' | trans }}</a></li>
+                            <li> <a href="{{ path('product_edit', { 'id': product.id }) }}">{{ 'btn.edit' | trans }}</a></li>
                         </ul>
                     </div>
                 </td>
@@ -38,14 +42,10 @@
         {% endfor %}
         </tbody>
     </table>
-    {% else %}
-        <div class="alert alert-info">
-            {{ 'box.unvailable' | trans }}
-        </div>
-    {% endif %}
-    <div class="row">
-        <div class="col-md-12">
-            <a class="btn btn-success" href="{{ path('box_new') }}">{{ 'box.create' | trans }}</a>
-        </div>
-    </div>
+
+    <ul>
+        <li>
+            <a href="{{ path('product_new') }}">Create a new product</a>
+        </li>
+    </ul>
 {% endblock %}

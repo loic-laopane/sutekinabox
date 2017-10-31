@@ -49,22 +49,10 @@ class Product
      */
     private $price;
 
-    /**
-     * @var
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Box")
-     */
-    private $boxes;
-
-
-    /**
-     * @var array
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Supplier")
-     */
-    private $suppliers;
 
     /**
      * @var string
-     * @ORM\Column(name="state", type="string", length=255)
+     * @ORM\Column(name="state", type="string", length=255, nullable=true)
      */
     private $state;
 
@@ -179,78 +167,10 @@ class Product
      */
     public function __construct()
     {
-        $this->boxes = new \Doctrine\Common\Collections\ArrayCollection();
         $this->suppliers = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->setState('in_stock');
+        $this->setState('available');
     }
 
-    /**
-     * Add box
-     *
-     * @param \AppBundle\Entity\Box $box
-     *
-     * @return Product
-     */
-    public function addBox(\AppBundle\Entity\Box $box)
-    {
-        $this->boxes[] = $box;
-
-        return $this;
-    }
-
-    /**
-     * Remove box
-     *
-     * @param \AppBundle\Entity\Box $box
-     */
-    public function removeBox(\AppBundle\Entity\Box $box)
-    {
-        $this->boxes->removeElement($box);
-    }
-
-    /**
-     * Get boxes
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getBoxes()
-    {
-        return $this->boxes;
-    }
-
-    /**
-     * Add supplier
-     *
-     * @param \AppBundle\Entity\Supplier $supplier
-     *
-     * @return Product
-     */
-    public function addSupplier(\AppBundle\Entity\Supplier $supplier)
-    {
-        $this->suppliers[] = $supplier;
-
-        return $this;
-    }
-
-    /**
-     * Remove supplier
-     *
-     * @param \AppBundle\Entity\Supplier $supplier
-     */
-    public function removeSupplier(\AppBundle\Entity\Supplier $supplier)
-    {
-        $this->suppliers->removeElement($supplier);
-    }
-
-    /**
-     * Get suppliers
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getSuppliers()
-    {
-        return $this->suppliers;
-    }
 
     /**
      * Set state

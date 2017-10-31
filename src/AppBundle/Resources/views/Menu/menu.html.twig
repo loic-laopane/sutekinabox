@@ -15,15 +15,23 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 {% if app.user is  null %}
-                    <li {{ active_login is defined ? 'class="active"' }}><a href="{{ path('login') }}">{{ 'menu.login' | trans }}</a></li>
+                    <li><a href="{{ path('login') }}">{{ 'menu.login' | trans }}</a></li>
                 {% else %}
-                <li class="active"><a href="{{ path('admin_dashboard') }}">{{ 'menu.dashboard' | trans }}</a></li>
-                <li><a href="#">Link</a></li>
+                <li><a href="{{ path('admin_dashboard') }}">{{ 'menu.dashboard' | trans }}</a></li>
+
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ 'menu.box.title' | trans }} <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{{ path('box_new') }}">{{ 'menu.box.new' | trans }}</a></li>
                         <li><a href="{{ path('box_list') }}">{{ 'menu.box.list' | trans }}</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ 'menu.product.title' | trans }} <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ path('product_new') }}">{{ 'menu.product.new' | trans }}</a></li>
+                        <li><a href="{{ path('product_list') }}">{{ 'menu.product.list' | trans }}</a></li>
                     </ul>
                 </li>
 
