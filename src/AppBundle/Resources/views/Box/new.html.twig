@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Box creation</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <input class="btn btn-success" type="submit" value="{{ 'btn.create' | trans }}" />
+        <a class="btn btn-default" href="{{ path('box_list') }}">{{ 'btn.back_to_list' | trans }}</a>
+    {{ form_end(form) }}
+
+{% endblock %}

@@ -1,0 +1,29 @@
+menu:
+    dashboard: Accueil
+    login: Se connecter
+    logout: Déconnexion
+    box:
+        title: Boxes
+        new: Créez votre box
+        list: Toutes les boxes
+
+login:
+    username: Identifiant
+    password: Mot de passe
+    bt-login: Se connecter
+    title: Connexion
+
+box:
+    create: Créer une box
+    unvailable: Aucune box disponible
+    products: Produits
+    budget: Budget alloué
+    name: Intitulé de la box
+
+btn:
+    show: Voir
+    edit: Modifier
+    delete: Supprimer
+    new: Nouveau
+    create: Créer
+    back_to_list: Retour à la liste
