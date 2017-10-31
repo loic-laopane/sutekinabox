@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Box;
+use AppBundle\Form\BoxProductType;
 use AppBundle\Services\BoxManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -85,6 +86,8 @@ class BoxController extends Controller
         $editForm = $this->createForm('AppBundle\Form\BoxType', $box);
         $editForm->handleRequest($request);
 
+        //$boxProductForm = $this->createForm(BoxProductType::class);
+
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
@@ -95,6 +98,7 @@ class BoxController extends Controller
             'box' => $box,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            //'boxProduct_form' => $boxProductForm->createView()
         ));
     }
 

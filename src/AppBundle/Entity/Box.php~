@@ -35,19 +35,18 @@ class Box
      */
     private $state;
 
-    /**
-     * @var array
-     *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Product")
-     */
-    private $products;
-
 
     /**
      * @var float
      * @ORM\Column(name="budget", type="float")
      */
     private $budget;
+
+    /**
+     * @var
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\BoxProduct", mappedBy="box")
+     */
+    private $boxProduct;
 
 
     /**
@@ -112,40 +111,30 @@ class Box
      */
     public function __construct()
     {
-        $this->products = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->setState('created');
     }
 
     /**
-     * Add product
+     * Set budget
      *
-     * @param \AppBundle\Entity\Product $product
+     * @param float $budget
      *
      * @return Box
      */
-    public function addProduct(\AppBundle\Entity\Product $product)
+    public function setBudget($budget)
     {
-        $this->products[] = $product;
+        $this->budget = $budget;
 
         return $this;
     }
 
     /**
-     * Remove product
+     * Get budget
      *
-     * @param \AppBundle\Entity\Product $product
+     * @return float
      */
-    public function removeProduct(\AppBundle\Entity\Product $product)
+    public function getBudget()
     {
-        $this->products->removeElement($product);
-    }
-
-    /**
-     * Get products
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getProducts()
-    {
-        return $this->products;
+        return $this->budget;
     }
 }

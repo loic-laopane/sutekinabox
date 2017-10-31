@@ -49,13 +49,18 @@ class Product
      */
     private $price;
 
-
     /**
-     * @var string
-     * @ORM\Column(name="state", type="string", length=255, nullable=true)
+     * @var
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\BoxProduct", mappedBy="product")
      */
-    private $state;
+    private $boxProduct;
 
+
+    public function __toString()
+    {
+        // TODO: Implement __toString() method.
+        return $this->getLabel();
+    }
 
     /**
      * Get id
@@ -71,7 +76,7 @@ class Product
      * Set label
      *
      * @param string $label
-     *
+     *sutekinabox.sqlite
      * @return Product
      */
     public function setLabel($label)
@@ -168,31 +173,40 @@ class Product
     public function __construct()
     {
         $this->suppliers = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->setState('available');
     }
 
 
     /**
-     * Set state
+     * Add boxProduct
      *
-     * @param string $state
+     * @param \AppBundle\Entity\BoxProduct $boxProduct
      *
      * @return Product
      */
-    public function setState($state)
+    public function addBoxProduct(\AppBundle\Entity\BoxProduct $boxProduct)
     {
-        $this->state = $state;
+        $this->boxProduct[] = $boxProduct;
 
         return $this;
     }
 
     /**
-     * Get state
+     * Remove boxProduct
      *
-     * @return string
+     * @param \AppBundle\Entity\BoxProduct $boxProduct
      */
-    public function getState()
+    public function removeBoxProduct(\AppBundle\Entity\BoxProduct $boxProduct)
     {
-        return $this->state;
+        $this->boxProduct->removeElement($boxProduct);
+    }
+
+    /**
+     * Get boxProduct
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getBoxProduct()
+    {
+        return $this->boxProduct;
     }
 }
