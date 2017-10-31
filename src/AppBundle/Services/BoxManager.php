@@ -33,7 +33,10 @@ class BoxManager
         {
             $box->removeProduct($product);
         }
+        $this->em->persist($box);
+        $this->em->flush();
         $this->em->remove($box);
-        //$this->em->flush();
+        $this->em->flush();
+
     }
 }
