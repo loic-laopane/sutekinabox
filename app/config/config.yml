@@ -67,7 +67,7 @@ framework:
                 arguments:
                     - state
             supports:
-                - AppBundle\Entity\Box
+                - AppBundle\Entity\BoxProduct
             places:
                 - available
                 - out_of_stock

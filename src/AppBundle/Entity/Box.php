@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -35,20 +36,47 @@ class Box
      */
     private $state;
 
-    /**
-     * @var array
-     *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Product")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $products;
-
 
     /**
      * @var float
      * @ORM\Column(name="budget", type="float")
      */
     private $budget;
+
+    /**
+     * @var
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\BoxProduct", mappedBy="box", cascade={"all"})
+     */
+    private $boxProduct;
+
+    private $products;
+
+    // Important
+    public function getProduct()
+    {
+        $products = new ArrayCollection();
+
+        foreach($this->boxProduct as $p)
+        {
+            $products[] = $p->getProduct();
+        }
+
+        return $products;
+    }
+    // Important
+    public function setProduct($products)
+    {
+        foreach($products as $p)
+        {
+            $bp = new BoxProduct();
+
+            $bp->setBox($this);
+            $bp->setProduct($p);
+
+            $this->addBoxProduct($bp);
+        }
+
+    }
 
 
     /**
@@ -113,42 +141,9 @@ class Box
      */
     public function __construct()
     {
-        $this->products = new \Doctrine\Common\Collections\ArrayCollection();
         $this->setState('created');
-    }
-
-    /**
-     * Add product
-     *
-     * @param \AppBundle\Entity\Product $product
-     *
-     * @return Box
-     */
-    public function addProduct(\AppBundle\Entity\Product $product)
-    {
-        $this->products[] = $product;
-
-        return $this;
-    }
-
-    /**
-     * Remove product
-     *
-     * @param \AppBundle\Entity\Product $product
-     */
-    public function removeProduct(\AppBundle\Entity\Product $product)
-    {
-        $this->products->removeElement($product);
-    }
-
-    /**
-     * Get products
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getProducts()
-    {
-        return $this->products;
+        $this->boxProduct = new ArrayCollection();
+        $this->products = new ArrayCollection();
     }
 
     /**
@@ -173,5 +168,44 @@ class Box
     public function getBudget()
     {
         return $this->budget;
+    }
+
+    /**
+     * Add boxProduct
+     *
+     * @param \AppBundle\Entity\BoxProduct $boxProduct
+     *
+     * @return Box
+     */
+    public function addBoxProduct(\AppBundle\Entity\BoxProduct $boxProduct)
+    {
+        $this->boxProduct[] = $boxProduct;
+
+        return $this;
+    }
+
+    /**
+     * Remove boxProduct
+     *
+     * @param \AppBundle\Entity\BoxProduct $boxProduct
+     */
+    public function removeBoxProduct(\AppBundle\Entity\BoxProduct $boxProduct)
+    {
+        $this->boxProduct->removeElement($boxProduct);
+    }
+
+    /**
+     * Get boxProduct
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getBoxProduct()
+    {
+        return $this->boxProduct;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 }
