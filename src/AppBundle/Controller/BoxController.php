@@ -53,7 +53,7 @@ class BoxController extends Controller
             return $this->redirectToRoute('box_show', array('id' => $box->getId()));
         }
 
-        return $this->render('AppBundle:Box:new.html.twig', array(
+        return $this->render('AppBundle:Box:form.html.twig', array(
             'box' => $box,
             'form' => $form->createView(),
         ));
@@ -95,9 +95,9 @@ class BoxController extends Controller
             return $this->redirectToRoute('box_edit', array('id' => $box->getId()));
         }
 
-        return $this->render('AppBundle:Box:edit.html.twig', array(
+        return $this->render('AppBundle:Box:form.html.twig', array(
             'box' => $box,
-            'edit_form' => $editForm->createView(),
+            'form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
             'boxProduct_form' => $boxProductForm->createView()
         ));

@@ -7,10 +7,11 @@
 
             {{ form_row(edit_form.name) }}
             {{ form_row(edit_form.budget) }}
-        {% for product in edit_form.product %}
+            <div class="form-group">
+                {{ form_row(edit_form.product) }}
+            </div>
 
 
-        {% endfor %}
         <input type="submit" value="{{ 'btn-edit' | trans }}" />
     {{ form_end(edit_form) }}
 
@@ -25,4 +26,24 @@
             {{ form_end(delete_form) }}
         </li>
     </ul>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        $(function(){
+           $('.panel-change').on('click', function (e) {
+               var checkbox = $(this).find('input[type="checkbox"]');
+               if(checkbox.is(':checked'))
+               {
+                   checkbox.prop('checked', false);
+                   $(this).removeClass('panel-checked');
+               }
+               else {
+                   checkbox.prop('checked', true);
+                   $(this).addClass('panel-checked');
+
+               }
+
+           }) ;
+        });
+    </script>
 {% endblock %}

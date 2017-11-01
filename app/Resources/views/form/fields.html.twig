@@ -1,0 +1,19 @@
+{% block _product_widget %}
+    {% spaceless %}
+        {% if expanded %}
+            <div class="row">
+            {% for child in form %}
+                    <div class="col-sm-4">
+                        <div class="panel panel-default" id="panel-{{ child.vars.name }}">
+                            <div class="panel-heading">{{ child.vars.label }}</div>
+                            <div class="panel-body panel-change {{ child.vars.checked ? 'panel-checked' }}">
+                                {{ form_widget(child) }}
+                            </div>
+                        </div>
+                    </div>
+
+            {% endfor %}
+            </div>
+        {% endif %}
+    {% endspaceless %}
+{% endblock %}
