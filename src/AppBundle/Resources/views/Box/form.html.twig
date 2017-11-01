@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Box edit</h1>
+
+    {{ form_start(form) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.budget) }}
+        {{ form_row(form.product) }}
+        <input type="submit" class="btn btn-success" value="{{ 'btn.save' | trans }}" />
+         <a href="{{ path('box_list') }}" class="btn btn-default">{{ 'btn.back_to_list' | trans }}</a>
+
+    {{ form_end(form) }}
+
+    {% if delete_form is defined %}
+        <div class="row">
+            <div class="col-md-12">
+                {{ form_start(delete_form) }}
+                    <input type="submit" value="{{ 'btn.delete' | trans }}">
+                {{ form_end(delete_form) }}
+            </div>
+        </div>
+        {% endif %}
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('js/app.box.js') }}"></script>
+{% endblock %}

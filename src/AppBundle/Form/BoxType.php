@@ -25,7 +25,7 @@ class BoxType extends AbstractType
                 ->add('budget', MoneyType::class, ['label' => 'box.budget'])
                 ->add('product', EntityType::class, array(
                     'class' => Product::class,
-                    'label' => 'label',
+                    'label' => 'box.products',
                     'multiple' => true,
                     'expanded' => true
                 ))
@@ -47,7 +47,7 @@ class BoxType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_box';
+        return null;
     }
 
 

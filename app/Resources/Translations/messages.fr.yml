@@ -31,6 +31,7 @@ btn:
     new: Nouveau
     create: Créer
     back_to_list: Retour à la liste
+    save: Enregistrer
 
 
 available: Disponible

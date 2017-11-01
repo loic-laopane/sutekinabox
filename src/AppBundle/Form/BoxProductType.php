@@ -36,7 +36,7 @@ class BoxProductType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_boxproduct';
+        return null;
     }
 
 
