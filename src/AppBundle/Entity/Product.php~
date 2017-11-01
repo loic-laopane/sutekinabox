@@ -51,22 +51,9 @@ class Product
 
     /**
      * @var
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Box")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\BoxProduct", mappedBy="product")
      */
-    private $boxes;
-
-
-    /**
-     * @var array
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Supplier")
-     */
-    private $suppliers;
-
-    /**
-     * @var string
-     * @ORM\Column(name="state", type="string", length=255)
-     */
-    private $state;
+    private $boxProduct;
 
 
     /**
@@ -83,7 +70,7 @@ class Product
      * Set label
      *
      * @param string $label
-     *
+     *sutekinabox.sqlite
      * @return Product
      */
     public function setLabel($label)
@@ -179,75 +166,7 @@ class Product
      */
     public function __construct()
     {
-        $this->boxes = new \Doctrine\Common\Collections\ArrayCollection();
         $this->suppliers = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-    /**
-     * Add box
-     *
-     * @param \AppBundle\Entity\Box $box
-     *
-     * @return Product
-     */
-    public function addBox(\AppBundle\Entity\Box $box)
-    {
-        $this->boxes[] = $box;
-
-        return $this;
-    }
-
-    /**
-     * Remove box
-     *
-     * @param \AppBundle\Entity\Box $box
-     */
-    public function removeBox(\AppBundle\Entity\Box $box)
-    {
-        $this->boxes->removeElement($box);
-    }
-
-    /**
-     * Get boxes
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getBoxes()
-    {
-        return $this->boxes;
-    }
-
-    /**
-     * Add supplier
-     *
-     * @param \AppBundle\Entity\Supplier $supplier
-     *
-     * @return Product
-     */
-    public function addSupplier(\AppBundle\Entity\Supplier $supplier)
-    {
-        $this->suppliers[] = $supplier;
-
-        return $this;
-    }
-
-    /**
-     * Remove supplier
-     *
-     * @param \AppBundle\Entity\Supplier $supplier
-     */
-    public function removeSupplier(\AppBundle\Entity\Supplier $supplier)
-    {
-        $this->suppliers->removeElement($supplier);
-    }
-
-    /**
-     * Get suppliers
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getSuppliers()
-    {
-        return $this->suppliers;
-    }
 }

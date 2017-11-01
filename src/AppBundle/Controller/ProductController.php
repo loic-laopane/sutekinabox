@@ -108,11 +108,11 @@ class ProductController extends Controller
     {
         $form = $this->createDeleteForm($product);
         $form->handleRequest($request);
-
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($product);
+        $em->flush();
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($product);
-            $em->flush();
+
         }
 
         return $this->redirectToRoute('product_list');

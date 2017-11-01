@@ -4,9 +4,16 @@
     <h1>Box edit</h1>
 
     {{ form_start(edit_form) }}
-        {{ form_widget(edit_form) }}
+
+            {{ form_row(edit_form.name) }}
+            {{ form_row(edit_form.budget) }}
+        {% for product in edit_form.product %}
+
+
+        {% endfor %}
         <input type="submit" value="{{ 'btn-edit' | trans }}" />
     {{ form_end(edit_form) }}
+
 
     <ul>
         <li>
