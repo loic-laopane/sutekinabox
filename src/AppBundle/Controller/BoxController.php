@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Box;
+use AppBundle\Entity\BoxProduct;
 use AppBundle\Form\BoxProductType;
 use AppBundle\Services\BoxManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -86,7 +87,7 @@ class BoxController extends Controller
         $editForm = $this->createForm('AppBundle\Form\BoxType', $box);
         $editForm->handleRequest($request);
 
-        //$boxProductForm = $this->createForm(BoxProductType::class);
+        $boxProductForm = $this->createForm(BoxProductType::class);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
@@ -98,7 +99,37 @@ class BoxController extends Controller
             'box' => $box,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-            //'boxProduct_form' => $boxProductForm->createView()
+            'boxProduct_form' => $boxProductForm->createView()
+        ));
+    }
+
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/{id}/add", name="box_edit")
+     */
+    public function addProduct(Request $request, Box $box)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $form = $this->createForm(BoxProductType::class);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $datas = $form->getData();
+            foreach($datas['product'] as $product)
+            {
+                $boxProduct = new BoxProduct();
+                $boxProduct->setBox($box);
+                $boxProduct->setProduct($product);
+                $em->persist($boxProduct);
+            }
+            $em->flush();
+        }
+
+
+        return $this->render('AppBundle:Box:addProduct.html.twig', array(
+          'form' => $form->createView(),
+            'box' => $box
         ));
     }
 
