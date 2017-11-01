@@ -51,16 +51,10 @@ class Product
 
     /**
      * @var
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\BoxProduct", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\BoxProduct", mappedBy="product", cascade={"all"})
      */
     private $boxProduct;
 
-
-    public function __toString()
-    {
-        // TODO: Implement __toString() method.
-        return $this->getLabel();
-    }
 
     /**
      * Get id
@@ -208,5 +202,10 @@ class Product
     public function getBoxProduct()
     {
         return $this->boxProduct;
+    }
+
+    public function __toString()
+    {
+        return $this->label;
     }
 }

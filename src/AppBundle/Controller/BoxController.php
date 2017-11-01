@@ -103,35 +103,6 @@ class BoxController extends Controller
         ));
     }
 
-    /**
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @Route("/{id}/add", name="box_edit")
-     */
-    public function addProduct(Request $request, Box $box)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $form = $this->createForm(BoxProductType::class);
-        $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid())
-        {
-            $datas = $form->getData();
-            foreach($datas['product'] as $product)
-            {
-                $boxProduct = new BoxProduct();
-                $boxProduct->setBox($box);
-                $boxProduct->setProduct($product);
-                $em->persist($boxProduct);
-            }
-            $em->flush();
-        }
-
-
-        return $this->render('AppBundle:Box:addProduct.html.twig', array(
-          'form' => $form->createView(),
-            'box' => $box
-        ));
-    }
 
     /**
      * Deletes a box entity.
@@ -145,8 +116,9 @@ class BoxController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $manager = $this->get('app.box_manager');
-            $manager->delete($box);
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($box);
+            $em->flush();
         }
 
         return $this->redirectToRoute('box_list');

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -44,9 +45,38 @@ class Box
 
     /**
      * @var
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\BoxProduct", mappedBy="box")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\BoxProduct", mappedBy="box", cascade={"all"})
      */
     private $boxProduct;
+
+    private $products;
+
+    // Important
+    public function getProduct()
+    {
+        $products = new ArrayCollection();
+
+        foreach($this->boxProduct as $p)
+        {
+            $products[] = $p->getProduct();
+        }
+
+        return $products;
+    }
+    // Important
+    public function setProduct($products)
+    {
+        foreach($products as $p)
+        {
+            $bp = new BoxProduct();
+
+            $bp->setBox($this);
+            $bp->setProduct($p);
+
+            $this->addBoxProduct($bp);
+        }
+
+    }
 
 
     /**
@@ -112,6 +142,8 @@ class Box
     public function __construct()
     {
         $this->setState('created');
+        $this->boxProduct = new ArrayCollection();
+        $this->products = new ArrayCollection();
     }
 
     /**
@@ -170,5 +202,10 @@ class Box
     public function getBoxProduct()
     {
         return $this->boxProduct;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 }
