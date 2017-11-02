@@ -2,7 +2,10 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Box;
+use AppBundle\Entity\BoxProduct;
 use AppBundle\Entity\Product;
+use AppBundle\Services\ProductManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
@@ -132,5 +135,15 @@ class ProductController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /**
+     * @Route("/box/{box_id}/product/{id}/validate", name="product_validate")
+     */
+    public function validateAction(Request $request, $box_id, Product $product, ProductManager $productManager)
+    {
+        $boxProduct = $this->getDoctrine()->getRepository('AppBundle:BoxProduct')->findOneByProduct($product);
+        $productManager->changeState($boxProduct);
+        return $this->redirectToRoute('box_show', array('id' => $box_id));
     }
 }

@@ -9,17 +9,53 @@
 namespace AppBundle\Services;
 
 
+use AppBundle\Entity\BoxProduct;
+use AppBundle\Entity\Product;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Workflow\Workflow;
 
 class ProductManager
 {
     private $em;
+    private $wf;
 
-    public function __construct(ObjectManager $em)
+    public function __construct(Workflow $wf, ObjectManager $em)
     {
         $this->em = $em;
+        $this->wf = $wf;
     }
 
+    public function changeState(BoxProduct $boxProduct)
+    {
+        $states = $this->getStates();
+        foreach($states as $state)
+        {
+            if($this->wf->can($boxProduct, $state))
+            {
+                $this->wf->apply($boxProduct, $state);
+                $this->em->persist($boxProduct);
+                $this->em->flush();
+                return;
+            }
+        }
 
+    }
+
+    public function getStates()
+    {
+        return [
+            'out_of_stock',
+            'stock',
+            'request',
+            'purchase',
+            'shipment',
+            'receipt',
+            'is_ok',
+            'is_nok',
+            'back_to_supplier',
+            'complete',
+            'boxing'
+        ];
+    }
 
 }

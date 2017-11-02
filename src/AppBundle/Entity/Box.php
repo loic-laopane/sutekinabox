@@ -45,6 +45,12 @@ class Box
 
     /**
      * @var
+     * @ORM\Column(name="validate", type="boolean", nullable=true)
+     */
+    private $validate = false;
+
+    /**
+     * @var
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\BoxProduct", mappedBy="box", cascade={"all"})
      */
     private $boxProduct;
@@ -76,6 +82,17 @@ class Box
             $this->addBoxProduct($bp);
         }
 
+    }
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->setState('created');
+        $this->setValidate(false);
+        $this->boxProduct = new ArrayCollection();
+        $this->products = new ArrayCollection();
     }
 
 
@@ -135,15 +152,6 @@ class Box
     public function getState()
     {
         return $this->state;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->setState('created');
-        $this->boxProduct = new ArrayCollection();
-        $this->products = new ArrayCollection();
     }
 
     /**
@@ -207,5 +215,29 @@ class Box
     public function __toString()
     {
         return $this->name;
+    }
+
+    /**
+     * Set open
+     *
+     * @param boolean $validate
+     *
+     * @return Box
+     */
+    public function setValidate($validate)
+    {
+        $this->validate = $validate;
+
+        return $this;
+    }
+
+    /**
+     * Get open
+     *
+     * @return boolean
+     */
+    public function getValidate()
+    {
+        return $this->validate;
     }
 }

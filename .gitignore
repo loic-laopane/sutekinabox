@@ -16,4 +16,5 @@ git /.web-server-pid
 /vendor/
 /web/bundles/
 .idea/
+sbadmin
 

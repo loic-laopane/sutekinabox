@@ -37,9 +37,21 @@ services:
         class: 'AppBundle\Services\UserManager'
         public: true
 
-    app.box_manager:
-        class: AppBundle\Services\BoxManager
+#    app.box_manager:
+#        class: AppBundle\Services\BoxManager
+#        public: true
+#        arguments:
+#            - '@workflow.box'
+
+    AppBundle\Services\BoxManager:
         public: true
+        arguments:
+            - '@workflow.box'
+            - '@workflow.product'
+
+    AppBundle\Services\ProductManager:
+        arguments:
+            - '@workflow.product'
 
 
 

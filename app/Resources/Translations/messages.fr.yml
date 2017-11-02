@@ -32,6 +32,7 @@ btn:
     create: Créer
     back_to_list: Retour à la liste
     save: Enregistrer
+    valid: Valider
 
 
 available: Disponible

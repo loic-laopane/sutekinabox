@@ -55,7 +55,7 @@ class BoxController extends Controller
 
         return $this->render('AppBundle:Box:form.html.twig', array(
             'box' => $box,
-            'form' => $form->createView(),
+            'form' => $form->createView()
         ));
     }
 
@@ -63,15 +63,27 @@ class BoxController extends Controller
      * Finds and displays a box entity.
      *
      * @Route("/{id}", name="box_show")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      */
-    public function showAction(Box $box)
+    public function showAction(Request $request, Box $box, BoxManager $boxManager)
     {
-        $deleteForm = $this->createDeleteForm($box);
+        $wf = $this->get('workflow.box');
+        $repo = $this->getDoctrine()->getRepository('AppBundle:BoxProduct');
+        $boxProducts = $repo->findBoxProducts($box);
+        $validForm = $wf->can($box, 'request') ? $this->createValidForm($box)->createView() : false;
+
+        $form = $this->createStateForm($box);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $boxManager->changeState($box);
+        }
 
         return $this->render('AppBundle:Box:show.html.twig', array(
             'box' => $box,
-            'delete_form' => $deleteForm->createView(),
+            'boxProducts' => $boxProducts,
+            'form' => $form->createView(),
+            'valid_form' => $validForm
         ));
     }
 
@@ -79,16 +91,19 @@ class BoxController extends Controller
      * Displays a form to edit an existing box entity.
      *
      * @Route("/{id}/edit", name="box_edit")
-     * @Method({"GET", "POST"})
+     * @Method({"GET", "POST", "DELETE"})
      */
     public function editAction(Request $request, Box $box)
     {
+        $wf = $this->get('workflow.box');
         $deleteForm = $this->createDeleteForm($box);
+        $validForm =  $this->createValidForm($box);
         $editForm = $this->createForm('AppBundle\Form\BoxType', $box);
         $editForm->handleRequest($request);
 
         $boxProductForm = $this->createForm(BoxProductType::class);
 
+        dump($box);
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
@@ -99,6 +114,7 @@ class BoxController extends Controller
             'box' => $box,
             'form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'valid_form' => $validForm->createView(),
             'boxProduct_form' => $boxProductForm->createView()
         ));
     }
@@ -125,6 +141,39 @@ class BoxController extends Controller
     }
 
     /**
+     * @Route("/{id}/valid", name="box_valid")
+     */
+    public function validAction(Request $request, Box $box, BoxManager $boxManager) {
+        $form = $this->createValidForm($box);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $boxManager->changeState($box);
+        }
+        return $this->redirectToRoute('box_edit', array('id' => $box->getId()));
+    }
+
+    /**
+     * @param Request $request
+     * @param Box $box
+     * @param BoxManager $boxManager
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @Method("POST")
+     * @Route("/{id}/state", name="box_state")
+     */
+    public function stateAction(Request $request, Box $box, BoxManager $boxManager)
+    {
+        $form = $this->createValidForm($box);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $boxManager->changeState($box);
+
+        }
+        return $this->redirectToRoute('box_show', array('id' => $box->getId()));
+    }
+
+    /**
      * Creates a form to delete a box entity.
      *
      * @param Box $box The box entity
@@ -138,5 +187,23 @@ class BoxController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    private function createValidForm(Box $box)
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('box_valid', array('id' => $box->getId())))
+            ->setMethod('POST')
+            ->getForm()
+            ;
+    }
+
+    private function createStateForm(Box $box)
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('box_show', array('id' => $box->getId())))
+            ->setMethod('POST')
+            ->getForm()
+            ;
     }
 }

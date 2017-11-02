@@ -1,0 +1,7 @@
+.panel-checked {
+    background: #ffffcc;
+}
+.card {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}

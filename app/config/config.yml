@@ -35,7 +35,7 @@ framework:
     workflows:
         box:
             marking_store:
-                type: multiple_state
+                type: single_state
                 arguments:
                     - state
             supports:
@@ -63,7 +63,7 @@ framework:
 
         product:
             marking_store:
-                type: multiple_state
+                type: single_state
                 arguments:
                     - state
             supports:
@@ -80,6 +80,7 @@ framework:
                 - nok
                 - back_to_supplier
                 - ready
+                - in_box
             transitions:
                 out_of_stock:
                     from: [available, remplacing]
@@ -94,11 +95,8 @@ framework:
                     from: requested
                     to:   purshased
                 shipment:
-                    from: [purshased, remplacing]
+                    from: purshased
                     to:   shipped
-                receipt:
-                    from: shipped
-                    to: received
                 receipt:
                     from: shipped
                     to: received
@@ -117,6 +115,9 @@ framework:
                 complete:
                     from: ok
                     to:   ready
+                boxing:
+                    from: ready
+                    to: in_box
 
 # Twig Configuration
 twig:

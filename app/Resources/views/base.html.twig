@@ -6,32 +6,66 @@
         {% block stylesheets %}{% endblock %}
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-
         <!-- Optional theme -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
 
-        <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-        <!-- Latest compiled and minified JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        <!-- Bootstrap Core CSS -->
+        <link href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+
+        <!-- MetisMenu CSS -->
+        <link href="{{ asset('vendor/metisMenu/metisMenu.min.css') }}" rel="stylesheet">
+
+        <!-- Custom CSS -->
+        <link href="{{ asset('dist/css/sb-admin-2.css') }}" rel="stylesheet">
+
+        <!-- Morris Charts CSS -->
+
+        <!-- Custom Fonts -->
+        <link href="{{ asset('vendor/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
+
+        <link rel="stylesheet" href="{{ asset('styles/css/styles.css') }}">
+
+<link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
-    <div class="container">
+    <div id="wrapper">
         {% include 'AppBundle:Menu:menu.html.twig' %}
-        {% set errors =  app.session.flashbag.all() %}
-        {% for type, arr in errors %}
-            <div class="alert alert-{{ type }}">
-                {% for message in arr %}
-                    <li>{{ message }}</li>
-                {% endfor %}
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">{% block h1 %}{{ app_name }}{% endblock %}</h1>
+                </div>
+                <!-- /.col-lg-12 -->
             </div>
-        {% endfor %}
-
-        {% block body %}{% endblock %}
+            <div class="row">
+                <div class="col-lg-12">
+                {% set errors =  app.session.flashbag.all() %}
+                {% for type, arr in errors %}
+                    <div class="alert alert-{{ type }}">
+                        {% for message in arr %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
+            {% block body %}{% endblock %}
+        </div>
     </div>
+    <!-- jQuery -->
+    <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
 
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{{ asset('vendor/bootstrap/js/bootstrap.min.js') }}"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="{{ asset('vendor/metisMenu/metisMenu.min.js') }}"></script>
+
+    <!-- Morris Charts JavaScript -->
+    <script src="{{ asset('vendor/raphael/raphael.min.js') }}"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="{{ asset('../dist/js/sb-admin-2.js') }}"></script>
         {% block javascripts %}{% endblock %}
     </body>
 </html>

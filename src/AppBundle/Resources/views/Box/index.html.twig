@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
-
+{% block h1 %}Liste des box{% endblock %}
 {% block body %}
-    <h1>Boxes list</h1>
+
     {% if boxes|length > 0 %}
     <table class="table">
         <thead>
@@ -10,6 +10,7 @@
                 <th>Name</th>
                 <th>State</th>
                 <th>Budget</th>
+                <th>Status</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -20,6 +21,7 @@
                 <td>{{ box.name }}</td>
                 <td>{{ box.state }}</td>
                 <td>{{ box.budget }}</td>
+                <td>{{ box.validate ? 'Validé' : 'En cours de création' }}</td>
                 <td>
                     <!-- Split button -->
                     <div class="btn-group">

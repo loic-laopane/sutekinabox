@@ -10,4 +10,14 @@ namespace AppBundle\Repository;
  */
 class BoxRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findBoxProducts($box_id)
+    {
+        return $this->createQueryBuilder('b')
+            ->join('b.boxProduct', 'bp')
+            ->join('bp.product', 'p')
+            ->select('b, bp')
+            ->where('b.id = :box_id')->setParameter('box_id', $box_id)
+            ->getQuery()
+            ->getResult();
+    }
 }
