@@ -25,20 +25,14 @@ class ProductManager
         $this->wf = $wf;
     }
 
-    public function changeState(BoxProduct $boxProduct)
+    public function changeState(BoxProduct $boxProduct, $state)
     {
-        $states = $this->getStates();
-        foreach($states as $state)
+        if($this->wf->can($boxProduct, $state))
         {
-            if($this->wf->can($boxProduct, $state))
-            {
-                $this->wf->apply($boxProduct, $state);
-                $this->em->persist($boxProduct);
-                $this->em->flush();
-                return;
-            }
+            $this->wf->apply($boxProduct, $state);
+            $this->em->persist($boxProduct);
+            $this->em->flush();
         }
-
     }
 
     public function getStates()

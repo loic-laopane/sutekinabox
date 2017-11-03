@@ -143,7 +143,7 @@ class ProductController extends Controller
     public function validateAction(Request $request, $box_id, Product $product, ProductManager $productManager)
     {
         $boxProduct = $this->getDoctrine()->getRepository('AppBundle:BoxProduct')->findOneByProduct($product);
-        $productManager->changeState($boxProduct);
-        return $this->redirectToRoute('box_show', array('id' => $box_id));
+        $productManager->changeState($boxProduct, $request->get('state'));
+        return $this->redirectToRoute('box_manage', array('id' => $box_id));
     }
 }

@@ -71,6 +71,7 @@ framework:
             places:
                 - available
                 - out_of_stock
+                - cancelled
                 - requested
                 - purshased
                 - shipped
@@ -81,10 +82,14 @@ framework:
                 - back_to_supplier
                 - ready
                 - in_box
+
             transitions:
                 out_of_stock:
-                    from: [available, remplacing]
+                    from: back_to_supplier
                     to: out_of_stock
+                cancel:
+                    from: out_of_stock
+                    to: cancelled
                 stock:
                     from: out_of_stock
                     to: available
@@ -97,6 +102,9 @@ framework:
                 shipment:
                     from: purshased
                     to:   shipped
+                reshipment:
+                    from: remplacing
+                    to: shipped
                 receipt:
                     from: shipped
                     to: received

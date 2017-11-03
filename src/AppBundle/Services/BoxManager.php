@@ -12,6 +12,7 @@ namespace AppBundle\Services;
 use AppBundle\Entity\Box;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Exception\LogicException;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Workflow\Workflow;
@@ -22,15 +23,17 @@ class BoxManager
     private $wf_box;
     private $wf_product;
     private $session;
+    private $dispatcher;
 
 
-    public function __construct(Workflow $wf_box, Workflow $wf_product, ObjectManager $em, SessionInterface $session)
+    public function __construct(Workflow $wf_box, Workflow $wf_product, ObjectManager $em, SessionInterface $session, EventDispatcherInterface $dispatcher)
     {
         $this->em = $em;
         //Todo: Creer un service pour le workflow box
         $this->wf_box = $wf_box;
         $this->wf_product = $wf_product;
         $this->session = $session;
+        $this->dispatcher = $dispatcher;
 
     }
 
@@ -98,7 +101,7 @@ class BoxManager
             $boxProducts = $this->getBoxProduct($box);
             foreach($boxProducts as $boxProduct)
             {
-                if(!$this->wf_product->can($boxProduct, 'boxing'))
+                if(!in_array($boxProduct->getState(), array('cancelled', 'ready')))
                 {
                     $this->session->getFlashBag()->add('danger', 'Le produit '.$boxProduct->getProduct()->getLabel().' est à l\'état '.$boxProduct->getState());
                     return false;
@@ -126,9 +129,11 @@ class BoxManager
     public function getStates()
     {
         return [
-            'request',
-            'provisionning',
-            'complete'
+            'created',
+            'requested',
+            'provisionned',
+            'completed',
+            'unvailable'
         ];
     }
 
@@ -138,6 +143,7 @@ class BoxManager
             $this->wf_box->apply($box, $state);
             $this->em->persist($box);
             $this->em->flush();
+            $this->dispatcher->dispatch('', '');
             $this->session->getFlashBag()->add('success', 'La box a changé d\'état');
         }
         catch (LogicException $e)
@@ -155,5 +161,23 @@ class BoxManager
     public function getBoxProduct(Box $box)
     {
         return $this->em->getRepository('AppBundle:BoxProduct')->findBoxProducts($box);
+    }
+
+    /**
+     * @param $state
+     * @return bool|mixed
+     */
+    public function getNextState($state)
+    {
+        $states = $this->getStates();
+        $key = array_search($state, $states);
+        if($key)
+        {
+            return isset($states[$key+1]) ? $states[$key+1] : $state;
+        }
+        else {
+            return false;
+        }
+
     }
 }

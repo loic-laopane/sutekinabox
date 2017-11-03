@@ -21,12 +21,11 @@
             <div class="panel-heading">{{ box.name }}</div>
             <div class="panel-body">
                 <h4>Budget : &euro; {{ box.budget }}</h4>
-                <p>Etat : {{ box.state }}</p>
+                <p>Etat : {{ box.state | trans }}</p>
                 <p>
                 {% if workflow_transitions(box)|length > 0 %}
                     {{ form_start(form) }}
-                    <button class="btn btn-success" type="submit">Passer à l'étape suivante</button>
-
+                    <button class="btn btn-success" type="submit">Passer à l'étape : <strong>{{ ('btn.' ~ btn_state) | trans }}</strong></button>
                     {{ form_end(form) }}
                 {% else %}
                     <p><strong>La box est prête</strong></p>
@@ -56,12 +55,21 @@
                     <tr class="{{ loop.index is even ? 'even' : 'odd' }}">
                         <td>{{ boxProduct.product.label }}</td>
                         <td>{{ boxProduct.product.description }}</td>
-                        <td>{{ boxProduct.state }}</td>
+                        <td>{{ boxProduct.state | trans }}</td>
                         <td>
-                            {% if workflow_can(boxProduct, 'boxing') == false %}
-                            <form method="post" action="{{ path('product_validate', {'box_id' : box.id, 'id':boxProduct.product.id}) }}">
-                                <button type="submit" class="btn btn-primary">Change</button>
-                            </form>
+                            {% if workflow_has_marked_place(boxProduct, 'complete') == false %}
+                                    {% for transition in workflow_transitions(boxProduct) %}
+                                        {% if workflow_can(boxProduct, transition.name) %}
+                                            <form method="post" action="{{ path('product_validate', {'box_id' : box.id, 'id':boxProduct.product.id}) }}">
+                                                <input type="hidden" name="state" value="{{ transition.name }}">
+                                            <button type="submit" class="btn btn-primary">{{ ('btn.'~transition.name) | trans }}</button>
+                                            </form>
+                                        {% endif %}
+                                     {% else %}
+                                        ---
+                                    {% endfor %}
+
+
                             {% endif %}
                             </td>
                     </tr>

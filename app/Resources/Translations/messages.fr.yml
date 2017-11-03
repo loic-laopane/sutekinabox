@@ -34,10 +34,24 @@ btn:
     back_to_list: Retour à la liste
     save: Enregistrer
     valid: Valider
+    requested: Demandé
+    provisionned: En cours d'achat
+    completed: Complète
+    is_ok: Produit conforme
+    is_nok: Produit non conforme
+    shipment: Produit envoyé
+    reshipment: Produit renvoyé
+    back_to_supplier: Retour au fournisseur
+    replace: Produit remplacé
+    out_of_stock: Rupture de stock
+    receipt: Produit reçu
+    stock: En stock
+    cancel: Annulation
 
 
 available: Disponible
-requested: Demande en cours
+requested: A traiter
+provisionned: En cours d'approvisionnement
 out_of_stock: Rupture
 purshased: Commandé
 shipped: En cours de livraison
@@ -45,5 +59,6 @@ remplacing: En remplacement
 received: Reçu
 ok: Conforme
 nok: Non conforme
+cancelled: Annulé
 back_to_supplier: Retour fournisseur
 ready: Prêt pour conditionnement

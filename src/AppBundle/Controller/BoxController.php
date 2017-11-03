@@ -82,7 +82,7 @@ class BoxController extends Controller
         $repo = $this->getDoctrine()->getRepository('AppBundle:BoxProduct');
         $boxProducts = $repo->findBoxProducts($box);
         $validForm = $wf->can($box, 'request') ? $this->createValidForm($box)->createView() : false;
-
+        $btn_state = $boxManager->getNextState($box->getState());
         $form = $this->createStateForm($box);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid())
@@ -94,7 +94,8 @@ class BoxController extends Controller
             'box' => $box,
             'boxProducts' => $boxProducts,
             'form' => $form->createView(),
-            'valid_form' => $validForm
+            'valid_form' => $validForm,
+            'btn_state' => $btn_state
         ));
     }
 
