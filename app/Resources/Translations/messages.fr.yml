@@ -26,6 +26,7 @@ box:
 
 btn:
     show: Voir
+    manage: Gérer
     edit: Modifier
     delete: Supprimer
     new: Nouveau

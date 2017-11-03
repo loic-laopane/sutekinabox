@@ -20,4 +20,13 @@ class BoxRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findAchatBoxes()
+    {
+        return $this->createQueryBuilder('b')
+            ->where('b.state != :created_state')
+            ->setParameter('created_state', 'created')
+            ->getQuery()
+            ->getResult();
+    }
 }

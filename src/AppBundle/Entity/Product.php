@@ -208,4 +208,9 @@ class Product
     {
         return $this->label;
     }
+
+    public function displayName()
+    {
+        return $this->getLabel();
+    }
 }

@@ -25,7 +25,8 @@ class BoxType extends AbstractType
                 ->add('budget', MoneyType::class, ['label' => 'box.budget'])
                 ->add('product', EntityType::class, array(
                     'class' => Product::class,
-                    'label' => 'box.products',
+                    //'label' => 'box.products',
+                    'choice_label' => 'displayName',
                     'multiple' => true,
                     'expanded' => true
                 ))

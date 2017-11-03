@@ -63,13 +63,16 @@
                         <li>
                             <a href="{{ path('box_list') }}">Tous les boxes</a>
                         </li>
+                        {% if is_granted('ROLE_MARKETING') %}
                         <li>
                             <a href="{{ path('box_new') }}">Ajouter une box</a>
                         </li>
+                        {% endif %}
                     </ul>
                     <!-- /.nav-second-level -->
                 </li>
 
+                {% if is_granted('ROLE_ACHAT') %}
                 <li>
                     <a href="#"><i class="fa fa-wrench fa-fw"></i> Produit<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
@@ -77,11 +80,12 @@
                             <a href="{{ path('product_list') }}">Tous les produits</a>
                         </li>
                         <li>
-                            <a href="{{ path('product_new') }}">Ajouter une box</a>
+                            <a href="{{ path('product_new') }}">Ajouter un produit</a>
                         </li>
                     </ul>
                     <!-- /.nav-second-level -->
                 </li>
+                {% endif %}
             </ul>
         </div>
         <!-- /.sidebar-collapse -->

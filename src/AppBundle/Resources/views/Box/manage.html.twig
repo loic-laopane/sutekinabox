@@ -22,13 +22,17 @@
             <div class="panel-body">
                 <h4>Budget : &euro; {{ box.budget }}</h4>
                 <p>Etat : {{ box.state }}</p>
+                <p>
                 {% if workflow_transitions(box)|length > 0 %}
                     {{ form_start(form) }}
                     <button class="btn btn-success" type="submit">Passer à l'étape suivante</button>
+
                     {{ form_end(form) }}
                 {% else %}
                     <p><strong>La box est prête</strong></p>
                 {% endif %}
+                </p>
+                <p><a href="{{ path('box_list') }}" class="btn btn-default">Retour à la liste</a></p>
             </div>
         </div>
         <!-- /.card -->

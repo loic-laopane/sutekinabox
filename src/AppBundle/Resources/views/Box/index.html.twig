@@ -11,17 +11,20 @@
                 <th>State</th>
                 <th>Budget</th>
                 <th>Status</th>
+                {% if is_granted('ROLE_ADMIN') %}
                 <th>Actions</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
         {% for box in boxes %}
             <tr>
-                <td><a href="{{ path('box_show', { 'id': box.id }) }}">{{ box.id }}</a></td>
+                <td><a href="{{ path('box_manage', { 'id': box.id }) }}">{{ box.id }}</a></td>
                 <td>{{ box.name }}</td>
                 <td>{{ box.state }}</td>
                 <td>{{ box.budget }}</td>
                 <td>{{ box.validate ? 'Validé' : 'En cours de création' }}</td>
+                {% if is_granted('ROLE_ADMIN') %}
                 <td>
                     <!-- Split button -->
                     <div class="btn-group">
@@ -31,11 +34,16 @@
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a href="{{ path('box_show', { 'id': box.id }) }}">{{ 'btn.show' | trans }}</a></li>
+                            {% if is_granted('ROLE_ACHAT') %}
+                            <li><a href="{{ path('box_manage', { 'id': box.id }) }}">{{ 'btn.manage' | trans }}</a></li>
+                            {% endif %}
+                            {% if is_granted('ROLE_MARKETING') %}
                             <li> <a href="{{ path('box_edit', { 'id': box.id }) }}">{{ 'btn.edit' | trans }}</a></li>
+                            {% endif %}
                         </ul>
                     </div>
                 </td>
+                {% endif %}
             </tr>
         {% endfor %}
         </tbody>
@@ -45,9 +53,11 @@
             {{ 'box.unvailable' | trans }}
         </div>
     {% endif %}
+    {% if is_granted('ROLE_MARKETING') %}
     <div class="row">
         <div class="col-md-12">
             <a class="btn btn-success" href="{{ path('box_new') }}">{{ 'box.create' | trans }}</a>
         </div>
     </div>
+    {% endif %}
 {% endblock %}

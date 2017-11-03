@@ -49,4 +49,4 @@ security:
     role_hierarchy:
             ROLE_ADMIN: ROLE_USER
             ROLE_MARKETING: ROLE_ADMIN
-            ROLE_ACHAT: ROLE_MARKETING
+            ROLE_ACHAT: ROLE_ADMIN

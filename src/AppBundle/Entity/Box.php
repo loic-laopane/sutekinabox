@@ -50,6 +50,12 @@ class Box
     private $validate = false;
 
     /**
+     * @var User
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
+     */
+    private $creator;
+
+    /**
      * @var
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\BoxProduct", mappedBy="box", cascade={"all"})
      */
@@ -240,4 +246,23 @@ class Box
     {
         return $this->validate;
     }
+
+    /**
+     * @return User
+     */
+    public function getCreator()
+    {
+        return $this->creator;
+    }
+
+    /**
+     * @param User $creator
+     * @return Box
+     */
+    public function setCreator($creator)
+    {
+        $this->creator = $creator;
+        return $this;
+    }
+
 }

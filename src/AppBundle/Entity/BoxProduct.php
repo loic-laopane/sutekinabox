@@ -51,7 +51,7 @@ class BoxProduct
 
     public function __construct()
     {
-        $this->setState('available');
+        $this->setState('requested');
         $this->setUpdatedAt(new \DateTime());
     }
 

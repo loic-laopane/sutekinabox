@@ -3,12 +3,15 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Box;
-use AppBundle\Entity\BoxProduct;
+use AppBundle\Entity\User;
 use AppBundle\Form\BoxProductType;
 use AppBundle\Services\BoxManager;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Box controller.
@@ -25,9 +28,12 @@ class BoxController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        $repo =  $this->getDoctrine()->getRepository('AppBundle:Box');
 
-        $boxes = $em->getRepository('AppBundle:Box')->findAll();
+        $boxes = $this->get('security.authorization_checker')->isGranted('ROLE_ACHAT')
+            ? $repo->findAchatBoxes()
+            :$repo->findByCreator($this->getUser());
+
 
         return $this->render('AppBundle:Box:index.html.twig', array(
             'boxes' => $boxes,
@@ -39,33 +45,38 @@ class BoxController extends Controller
      *
      * @Route("/new", name="box_new")
      * @Method({"GET", "POST"})
+     * @Security("has_role('ROLE_MARKETING')")
      */
     public function newAction(Request $request, BoxManager $boxManager)
     {
         $box = new Box();
         $form = $this->createForm('AppBundle\Form\BoxType', $box);
         $form->handleRequest($request);
+        if(!$this->getUser() instanceof User) throw new Exception('L\'utilisateur n\'est pas connecté');
 
+        $box->setCreator($this->getUser());
         if ($form->isSubmitted() && $form->isValid()) {
             $boxManager->insert($box);
 
 
-            return $this->redirectToRoute('box_show', array('id' => $box->getId()));
+            return $this->redirectToRoute('box_edit', array('id' => $box->getId()));
         }
 
         return $this->render('AppBundle:Box:form.html.twig', array(
             'box' => $box,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'can_save' => true
         ));
     }
 
     /**
      * Finds and displays a box entity.
      *
-     * @Route("/{id}", name="box_show")
+     * @Route("/manage/{id}", name="box_manage")
      * @Method({"GET", "POST"})
+     * @Security("has_role('ROLE_ACHAT')")
      */
-    public function showAction(Request $request, Box $box, BoxManager $boxManager)
+    public function manageAction(Request $request, Box $box, BoxManager $boxManager)
     {
         $wf = $this->get('workflow.box');
         $repo = $this->getDoctrine()->getRepository('AppBundle:BoxProduct');
@@ -79,7 +90,7 @@ class BoxController extends Controller
             $boxManager->changeState($box);
         }
 
-        return $this->render('AppBundle:Box:show.html.twig', array(
+        return $this->render('AppBundle:Box:manage.html.twig', array(
             'box' => $box,
             'boxProducts' => $boxProducts,
             'form' => $form->createView(),
@@ -91,7 +102,8 @@ class BoxController extends Controller
      * Displays a form to edit an existing box entity.
      *
      * @Route("/{id}/edit", name="box_edit")
-     * @Method({"GET", "POST", "DELETE"})
+     * @Method({"GET", "POST"})
+     * @Security("has_role('ROLE_MARKETING')")
      */
     public function editAction(Request $request, Box $box)
     {
@@ -100,14 +112,15 @@ class BoxController extends Controller
         $validForm =  $this->createValidForm($box);
         $editForm = $this->createForm('AppBundle\Form\BoxType', $box);
         $editForm->handleRequest($request);
+        $can_save = $wf->can($box, 'request') ? true : false;
 
         $boxProductForm = $this->createForm(BoxProductType::class);
 
-        dump($box);
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('box_edit', array('id' => $box->getId()));
+            $this->get('session')->getFlashBag()->add('success', 'La box a bien été mise à jour');
+            //return $this->redirectToRoute('box_edit', array('id' => $box->getId()));
         }
 
         return $this->render('AppBundle:Box:form.html.twig', array(
@@ -115,7 +128,8 @@ class BoxController extends Controller
             'form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
             'valid_form' => $validForm->createView(),
-            'boxProduct_form' => $boxProductForm->createView()
+            'boxProduct_form' => $boxProductForm->createView(),
+            'can_save' => $can_save
         ));
     }
 
@@ -141,6 +155,7 @@ class BoxController extends Controller
     }
 
     /**
+     * Faire changer l'état d'une box de created to request
      * @Route("/{id}/valid", name="box_valid")
      */
     public function validAction(Request $request, Box $box, BoxManager $boxManager) {
@@ -170,7 +185,7 @@ class BoxController extends Controller
             $boxManager->changeState($box);
 
         }
-        return $this->redirectToRoute('box_show', array('id' => $box->getId()));
+        return $this->redirectToRoute('box_manage', array('id' => $box->getId()));
     }
 
     /**
@@ -189,6 +204,11 @@ class BoxController extends Controller
         ;
     }
 
+    /**
+     * Form pour valider une box
+     * @param Box $box
+     * @return \Symfony\Component\Form\Form|\Symfony\Component\Form\FormInterface
+     */
     private function createValidForm(Box $box)
     {
         return $this->createFormBuilder()
@@ -201,7 +221,7 @@ class BoxController extends Controller
     private function createStateForm(Box $box)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('box_show', array('id' => $box->getId())))
+            ->setAction($this->generateUrl('box_manage', array('id' => $box->getId())))
             ->setMethod('POST')
             ->getForm()
             ;

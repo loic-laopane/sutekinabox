@@ -1,60 +1,59 @@
 {% extends 'base.html.twig' %}
 {% block h1 %}{{ delete_form is defined ? 'Modification' : 'Création' }} de box{% endblock %}
 {% block body %}
-
-    {{ form_start(form) }}
-        <div class="panel panel-red">
-            <div class="panel-heading">
-                Votre box
-            </div>
-            <div class="panel-body">
-                {{ form_row(form.name) }}
-                {{ form_row(form.budget) }}
-                <div class="row">
-                    <div class="col-md-12">
-                        {% if valid_form is not defined or valid_form %}
-                            <input type="submit" class="btn btn-success" value="{{ 'btn.save' | trans }}" />
-                        {% endif %}
-                        <a href="{{ path('box_list') }}" class="btn btn-default">{{ 'btn.back_to_list' | trans }}</a>
-                    </div>
-                </div>
-
-                {% if valid_form is not defined or valid_form %}
-
-                {% endif %}
-            </div>
-
-        </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                Gérer les produits
-            </div>
-            <div class="panel-body">
-                {{ form_row(form.product) }}
-            </div>
-        </div>
-
-    {{ form_end(form) }}
-
-    <hr>
     <div class="row">
-        {% if delete_form is defined  %}
-            <div class="col-md-2">
+        <div class="col-md-12">
+            {% if delete_form is defined and can_save %}
                 {{ form_start(delete_form) }}
                 <input type="submit" class="btn btn-danger" value="{{ 'btn.delete' | trans }}">
                 {{ form_end(delete_form) }}
-            </div>
-        {% endif %}
 
+            {% endif %}
 
-        {% if valid_form is defined %}
-            <div class="col-md-2">
+            {% if valid_form is defined and can_save %}
                 {{ form_start(valid_form) }}
                 <input type="submit" class="btn btn-info" value="{{ 'btn.valid' | trans }}">
                 {{ form_end(valid_form) }}
-            </div>
-        {% endif %}
 
+            {% endif %}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-12">
+
+            {{ form_start(form) }}
+                <div class="panel panel-red">
+                    <div class="panel-heading">
+                        Votre box
+                    </div>
+                    <div class="panel-body">
+                        {{ form_row(form.name) }}
+                        {{ form_row(form.budget) }}
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% if can_save %}
+                                    <input type="submit" class="btn btn-success" value="{{ 'btn.save' | trans }}" />
+                                {% endif %}
+                                <a href="{{ path('box_list') }}" class="btn btn-default">{{ 'btn.back_to_list' | trans }}</a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Gérer les produits
+                    </div>
+                    <div class="panel-body">
+                        {{ form_row(form.product) }}
+                    </div>
+                </div>
+
+            {{ form_end(form) }}
+
+        </div>
     </div>
 
 
