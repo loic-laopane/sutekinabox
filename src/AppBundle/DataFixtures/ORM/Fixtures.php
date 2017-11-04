@@ -30,6 +30,7 @@ class Fixtures extends Fixture
                         ->setPassword('$2y$13$mnRnq0tFG3ufIOByVfzsH.RX7FRo/brHXWq.tZ4qxsNuj6uJgygRe')
                         ->setFirstname('Janes')
                         ->setLastname('Doe')
+                        ->setEmail('marketing@sutekinabox.com')
                         ->setRoles(['ROLE_MARKETING']);
         $manager->persist($marketing_user);
 
@@ -38,6 +39,7 @@ class Fixtures extends Fixture
                     ->setPassword('$2y$13$95RnOX34A49R4IT4HWZppO109uClZFMhU1hEE6kP9aGznVz1PMDJu')
                     ->setFirstname('John')
                     ->setLastname('Doe')
+                    ->setEmail('achat@sutekinabox.com')
                     ->setRoles(['ROLE_ACHAT']);
         $manager->persist($achat_user);
 
@@ -52,17 +54,32 @@ class Fixtures extends Fixture
             $supplier_list[] = $supplier;
         }
 
-
-        // create 20 products! Bam!
-        for ($i = 0; $i < 20; $i++) {
+        $products = $this->getProduct();
+        for ($i = 0; $i < 7; $i++) {
             $product = new Product();
-            $product->setLabel('product '.$i);
-            $product->setReference('ref'.$i);
-            $product->setPrice(mt_rand(10, 100));
+            $product->setLabel($products[$i]);
+            $product->setReference('ref-'.str_replace(' ', '-', strtolower($product->getLabel())));
+            $product->setDescription('Description de '.$product->getLabel());
+            $product->setPrice(mt_rand(1, 7));
 
             $manager->persist($product);
         }
 
         $manager->flush();
+    }
+
+    public function getProduct()
+    {
+        return [
+          'Lacets',
+          'Gel boost',
+          'Porte-dossard',
+            'Manchons',
+          'Chaussette strap',
+            'Gel effort',
+            'Gourde',
+            'Ecouteurs blutooth',
+
+        ];
     }
 }
