@@ -7,6 +7,7 @@ imports:
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: fr
+    app_
 
 framework:
     #esi: ~
@@ -135,7 +136,7 @@ twig:
         - 'bootstrap_3_layout.html.twig'
         - 'form/fields.html.twig'
     globals:
-        app_name: '%app_name%'
+        app_name: 'Sutekinabox'
 
 
 # Doctrine Configuration
