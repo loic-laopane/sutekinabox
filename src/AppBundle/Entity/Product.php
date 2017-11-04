@@ -57,6 +57,14 @@ class Product
 
 
     /**
+     * @var Image
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Image", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $image;
+
+
+    /**
      * Get id
      *
      * @return int
@@ -203,6 +211,26 @@ class Product
     {
         return $this->boxProduct;
     }
+
+    /**
+     * @return Image
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param Image $image
+     * @return Product
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+        return $this;
+    }
+
+
 
     public function __toString()
     {

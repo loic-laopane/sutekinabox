@@ -52,6 +52,3 @@ services:
     AppBundle\Services\ProductManager:
         arguments:
             - '@workflow.product'
-
-
-
