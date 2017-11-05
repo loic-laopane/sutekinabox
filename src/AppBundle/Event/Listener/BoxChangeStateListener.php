@@ -13,19 +13,22 @@ use AppBundle\Entity\Box;
 use AppBundle\Event\BoxEvent;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Templating\EngineInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class BoxChangeStateListener
 {
     private $mailer;
     private $template;
     private $session;
+    private $translator;
     private $sender;
 
-    public function __construct(\Swift_Mailer $mailer, EngineInterface $template, SessionInterface $session, $sender)
+    public function __construct(\Swift_Mailer $mailer, EngineInterface $template, SessionInterface $session, TranslatorInterface $translator, $sender)
     {
         $this->mailer = $mailer;
         $this->template = $template;
         $this->session = $session;
+        $this->translator = $translator;
         $this->sender = $sender;
     }
 
@@ -33,9 +36,9 @@ class BoxChangeStateListener
     {
         $box = $event->getBox();
 
-        $message = 'La box '.$box->getName().' a changé d\'état : '.$box->getState();
+        $message = 'La box '.$box->getName().' a changé d\'état : '.$this->translator->trans($box->getState());
         //Envoi d'une notif
-        $this->flash($box, $message);
+        $this->flash($message,$box);
 
         $this->sendMail($box);
     }

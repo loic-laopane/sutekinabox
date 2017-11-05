@@ -72,7 +72,7 @@ class BoxController extends Controller
     /**
      * Finds and displays a box entity.
      *
-     * @Route("/manage/{id}", name="box_manage")
+     * @Route("/{id}/manage", name="box_manage")
      * @Method({"GET", "POST"})
      * @Security("has_role('ROLE_ACHAT')")
      */

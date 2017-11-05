@@ -16,6 +16,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Exception\LogicException;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Workflow\Workflow;
 
 class BoxManager
@@ -25,9 +26,10 @@ class BoxManager
     private $wf_product;
     private $session;
     private $dispatcher;
+    private $translator;
 
 
-    public function __construct(Workflow $wf_box, Workflow $wf_product, ObjectManager $em, SessionInterface $session, EventDispatcherInterface $dispatcher)
+    public function __construct(Workflow $wf_box, Workflow $wf_product, ObjectManager $em, SessionInterface $session, EventDispatcherInterface $dispatcher, TranslatorInterface $translator)
     {
         $this->em = $em;
         //Todo: Creer un service pour le workflow box
@@ -35,6 +37,7 @@ class BoxManager
         $this->wf_product = $wf_product;
         $this->session = $session;
         $this->dispatcher = $dispatcher;
+        $this->translator = $translator;
 
     }
 
@@ -145,7 +148,6 @@ class BoxManager
             $this->em->persist($box);
             $this->em->flush();
             $this->dispatcher->dispatch(BoxEvent::STATE, new BoxEvent($box));
-            //$this->session->getFlashBag()->add('success', 'La box a changé d\'état');
         }
         catch (LogicException $e)
         {
@@ -170,9 +172,10 @@ class BoxManager
      */
     public function getNextState($state)
     {
+
         $states = $this->getStates();
         $key = array_search($state, $states);
-        if($key)
+        if($key !== false)
         {
             return isset($states[$key+1]) ? $states[$key+1] : $state;
         }

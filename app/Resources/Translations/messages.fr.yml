@@ -47,6 +47,7 @@ btn:
     receipt: Produit reçu
     stock: En stock
     cancel: Annulation
+    purchase: Commander
 
 
 available: Disponible
