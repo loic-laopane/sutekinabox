@@ -239,6 +239,6 @@ class Product
 
     public function displayName()
     {
-        return $this->getLabel();
+        return ''.$this->getLabel()." : ".$this->getPrice().'€';
     }
 }

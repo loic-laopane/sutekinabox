@@ -3,7 +3,7 @@
 {% block body %}
     <h1>Product</h1>
 
-    <table>
+    <table class="table">
         <tbody>
             <tr>
                 <th>Id</th>
@@ -25,24 +25,27 @@
                 <th>Price</th>
                 <td>{{ product.price }}</td>
             </tr>
+            {% if product.image %}
             <tr>
-                <th>State</th>
-                <td>{{ product.state }}</td>
+                <th>Photo</th>
+                <td><img src="{{  asset('images/' ~product.image.path) }}" height="100" /></td>
             </tr>
+        {% endif %}
+
         </tbody>
     </table>
 
-    <ul>
-        <li>
-            <a href="{{ path('product_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('product_edit', { 'id': product.id }) }}">Edit</a>
-        </li>
-        <li>
+
+        <p>
+            <a href="{{ path('product_list') }}" class="btn btn-default">{{ 'btn.back_to_list' | trans }}</a>
+        </p>
+        <p>
+            <a href="{{ path('product_edit', { 'id': product.id }) }}" class="btn btn-success">{{ 'btn.edit' |trans }}</a>
+        </p>
+        <p>
             {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
+                <input type="submit" value="{{ 'btn.delete' | trans }}" class="btn btn-danger">
             {{ form_end(delete_form) }}
-        </li>
-    </ul>
+        </p>
+
 {% endblock %}

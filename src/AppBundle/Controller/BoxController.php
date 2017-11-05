@@ -56,10 +56,14 @@ class BoxController extends Controller
 
         $box->setCreator($this->getUser());
         if ($form->isSubmitted() && $form->isValid()) {
-            $boxManager->insert($box);
+
+            if($boxManager->insert($box))
+            {
+                return $this->redirectToRoute('box_edit', array('id' => $box->getId()));
+            }
 
 
-            return $this->redirectToRoute('box_edit', array('id' => $box->getId()));
+
         }
 
         return $this->render('AppBundle:Box:form.html.twig', array(
@@ -129,7 +133,6 @@ class BoxController extends Controller
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
             $this->get('session')->getFlashBag()->add('success', 'La box a bien été mise à jour');
             //return $this->redirectToRoute('box_edit', array('id' => $box->getId()));
         }

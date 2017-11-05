@@ -212,5 +212,13 @@ class Image
                 unlink($this->getTemp());
         }
     }
+
+    /**
+     * @ORM\PreRemove()
+     */
+    public function delete()
+    {
+        //toDo : supprimer la photo apres supression en bdd
+    }
 }
 

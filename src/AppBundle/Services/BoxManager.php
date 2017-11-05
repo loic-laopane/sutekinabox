@@ -51,8 +51,18 @@ class BoxManager
      * Insertion d'une box
      */
     public function insert(Box $box){
-        $this->em->persist($box);
-        $this->em->flush();
+
+        if($this->isBoxValid($box))
+        {
+            $this->em->persist($box);
+            $this->em->flush();
+            return true;
+        }
+        else {
+            $this->session->getFlashBag()->add('danger', 'Le coût total des produits ('.$this->getProductsCost($box).'€) dépasse le bugdet de '.$box->getBudget().'€');
+            return false;
+        }
+
     }
 
     /**
@@ -205,5 +215,23 @@ class BoxManager
             return false;
         }
 
+    }
+
+    /**
+     * @return int
+     */
+    public function getProductsCost(Box $box)
+    {
+        $sum = 0;
+        foreach($box->getBoxProduct() as $boxProduct)
+        {
+            $sum += $boxProduct->getProduct()->getPrice();
+        }
+        return $sum;
+    }
+
+    public function isBoxValid(Box $box)
+    {
+        return $this->getProductsCost($box) <= $box->getBudget();
     }
 }
