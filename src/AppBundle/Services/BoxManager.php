@@ -10,6 +10,7 @@ namespace AppBundle\Services;
 
 
 use AppBundle\Entity\Box;
+use AppBundle\Event\BoxEvent;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -143,8 +144,8 @@ class BoxManager
             $this->wf_box->apply($box, $state);
             $this->em->persist($box);
             $this->em->flush();
-            $this->dispatcher->dispatch('', '');
-            $this->session->getFlashBag()->add('success', 'La box a changé d\'état');
+            $this->dispatcher->dispatch(BoxEvent::STATE, new BoxEvent($box));
+            //$this->session->getFlashBag()->add('success', 'La box a changé d\'état');
         }
         catch (LogicException $e)
         {
