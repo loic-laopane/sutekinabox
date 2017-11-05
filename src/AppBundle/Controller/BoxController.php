@@ -70,6 +70,17 @@ class BoxController extends Controller
     }
 
     /**
+     * @Route("/{id}/show", name="box_show")
+     * @Method("GET")
+     */
+    public function showAction(Box $box)
+    {
+        return $this->render('AppBundle:Box:show.html.twig', array(
+          'box' => $box
+        ));
+    }
+
+    /**
      * Finds and displays a box entity.
      *
      * @Route("/{id}/manage", name="box_manage")
@@ -79,8 +90,6 @@ class BoxController extends Controller
     public function manageAction(Request $request, Box $box, BoxManager $boxManager)
     {
         $wf = $this->get('workflow.box');
-        $repo = $this->getDoctrine()->getRepository('AppBundle:BoxProduct');
-        $boxProducts = $repo->findBoxProducts($box);
         $validForm = $wf->can($box, 'request') ? $this->createValidForm($box)->createView() : false;
 
         $form = $this->createStateForm($box);
@@ -94,7 +103,6 @@ class BoxController extends Controller
 
         return $this->render('AppBundle:Box:manage.html.twig', array(
             'box' => $box,
-            'boxProducts' => $boxProducts,
             'form' => $form->createView(),
             'valid_form' => $validForm,
             'btn_state' => $btn_state

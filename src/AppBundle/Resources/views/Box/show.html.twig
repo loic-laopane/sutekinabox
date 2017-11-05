@@ -23,13 +23,7 @@
                 <h4>Budget : &euro; {{ box.budget }}</h4>
                 <p>Etat : {{ box.state | trans }}</p>
                 <p>
-                {% if workflow_transitions(box)|length > 0 %}
-                    {{ form_start(form) }}
-                    <button class="btn btn-success" type="submit">Passer à l'étape : <strong>{{ ('btn.' ~ btn_state) | trans }}</strong></button>
-                    {{ form_end(form) }}
-                {% else %}
                     <p><strong>La box est {{ box.state | trans }}</strong></p>
-                {% endif %}
                 </p>
                 <p><a href="{{ path('box_list') }}" class="btn btn-default">Retour à la liste</a></p>
             </div>
@@ -49,35 +43,15 @@
                         <th>Photo</th>
                         <th>Description</th>
                         <th>Etat</th>
-                        {% if box.state == 'provisionned'  %}
-                        <th>Actions</th>
-                        {% endif %}
+
                     </tr>
                     </thead>
                 {% for boxProduct in box.boxProduct %}
                     <tr class="{{ loop.index is even ? 'even' : 'odd' }}">
-                        <td><a href="{{ path('product_edit', {'id' : boxProduct.product.id}) }}">{{ boxProduct.product.label }}</a></td>
+                        <td><a href="{{ path('product_show', {'id' : boxProduct.product.id}) }}">{{ boxProduct.product.label }}</a></td>
                         <td><img src="{{ boxProduct.product.image ? asset('images/' ~ boxProduct.product.image.path) }}" alt="Photo {{ boxProduct.product.label }}" height="100" /></td>
                         <td>{{ boxProduct.product.description }}</td>
                         <td>{{ boxProduct.state | trans }}</td>
-                        {% if box.state == 'provisionned'  %}
-                        <td>
-                            {% if workflow_has_marked_place(boxProduct, 'complete') == false %}
-                                    {% for transition in workflow_transitions(boxProduct) %}
-                                        {% if workflow_can(boxProduct, transition.name) %}
-                                            <form method="post" action="{{ path('product_validate', {'box_id' : box.id, 'id':boxProduct.product.id}) }}">
-                                                <input type="hidden" name="state" value="{{ transition.name }}">
-                                            <button type="submit" class="btn btn-primary">{{ ('btn.'~transition.name) | trans }}</button>
-                                            </form>
-                                        {% endif %}
-                                     {% else %}
-                                        ---
-                                    {% endfor %}
-
-
-                            {% endif %}
-                            </td>
-                        {% endif %}
                     </tr>
                 {% endfor %}
             </div>

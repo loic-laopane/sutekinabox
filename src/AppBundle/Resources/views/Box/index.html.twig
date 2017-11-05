@@ -6,11 +6,10 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>State</th>
+                <th>#</th>
+                <th>{{ 'box.name' | trans }}</th>
+                <th>{{ 'box.state' | trans }}</th>
                 <th>Budget</th>
-                <th>Status</th>
                 {% if is_granted('ROLE_ADMIN') %}
                 <th>Actions</th>
                 {% endif %}
@@ -19,11 +18,10 @@
         <tbody>
         {% for box in boxes %}
             <tr>
-                <td><a href="{{ path('box_manage', { 'id': box.id }) }}">{{ box.id }}</a></td>
+                <td>#{{ box.id }}</td>
                 <td>{{ box.name }}</td>
-                <td>{{ box.state }}</td>
+                <td>{{ box.state | trans }}</td>
                 <td>{{ box.budget }}</td>
-                <td>{{ box.validate ? 'Validé' : 'En cours de création' }}</td>
                 {% if is_granted('ROLE_ADMIN') %}
                 <td>
                     <!-- Split button -->
@@ -35,10 +33,17 @@
                         </button>
                         <ul class="dropdown-menu">
                             {% if is_granted('ROLE_ACHAT') %}
-                            <li><a href="{{ path('box_manage', { 'id': box.id }) }}">{{ 'btn.manage' | trans }}</a></li>
+                            <li>
+                                <a href="{{ path('box_manage', { 'id': box.id }) }}">{{ 'btn.manage' | trans }}</a>
+                            </li>
                             {% endif %}
                             {% if is_granted('ROLE_MARKETING') %}
-                            <li> <a href="{{ path('box_edit', { 'id': box.id }) }}">{{ 'btn.edit' | trans }}</a></li>
+                            <li>
+                                {% if box.state == 'created' %}
+                                    <a href="{{ path('box_edit', { 'id': box.id }) }}">{{ 'btn.edit' | trans }}</a></li>
+                                {% else %}
+                                    <a href="{{ path('box_show', { 'id': box.id }) }}">{{ 'btn.show' | trans }}</a>
+                                {% endif %}
                             {% endif %}
                         </ul>
                     </div>

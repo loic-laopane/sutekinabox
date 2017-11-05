@@ -57,7 +57,7 @@ framework:
                     from: provisionned
                     to:   completed
                 unvailable:
-                    from: [created, requested, provisionned]
+                    from: provisionned
                     to: unvailable
 
 
@@ -81,7 +81,6 @@ framework:
                 - nok
                 - back_to_supplier
                 - ready
-                - in_box
 
             transitions:
                 out_of_stock:
@@ -123,9 +122,7 @@ framework:
                 complete:
                     from: ok
                     to:   ready
-                boxing:
-                    from: ready
-                    to: in_box
+
 
 # Twig Configuration
 twig:

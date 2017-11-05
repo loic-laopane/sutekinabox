@@ -23,6 +23,7 @@ box:
     products: Produits
     budget: Budget alloué
     name: Intitulé de la box
+    state: Etat
 
 btn:
     show: Voir
@@ -48,9 +49,11 @@ btn:
     stock: En stock
     cancel: Annulation
     purchase: Commander
+    complete: Terminer
 
 
 available: Disponible
+unvailable: Indisponible
 requested: A traiter
 provisionned: En cours d'approvisionnement
 out_of_stock: Rupture
@@ -63,3 +66,4 @@ nok: Non conforme
 cancelled: Annulé
 back_to_supplier: Retour fournisseur
 ready: Prêt pour conditionnement
+completed: Terminé

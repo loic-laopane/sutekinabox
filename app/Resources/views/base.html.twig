@@ -43,7 +43,7 @@
                 {% for type, arr in errors %}
                     <div class="alert alert-{{ type }}">
                         {% for message in arr %}
-                            <li>{{ message }}</li>
+                            <p>{{ message }}</p>
                         {% endfor %}
                     </div>
                 {% endfor %}

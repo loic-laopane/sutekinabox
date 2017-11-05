@@ -15,6 +15,7 @@ use Symfony\Component\EventDispatcher\Event;
 class BoxEvent extends Event
 {
     const STATE = 'box.state';
+    const PRODUCT = 'box_product.state';
     const EVENT = 'box.event';
 
     private $box;

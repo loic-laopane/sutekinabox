@@ -54,6 +54,16 @@ services:
             - '@workflow.product'
 
     AppBundle\Event\Listener\BoxChangeStateListener:
-        arguments: ['@swiftmailer.mailer', '@templating', '@session','@translator',  '%mailer_sender_address%']
+        arguments:
+            - '@swiftmailer.mailer'
+            - '@templating'
+            - '@session'
+            - '@translator'
+            - '@workflow.product'
+            - '@AppBundle\Services\BoxManager'
+            - '%mailer_sender_address%'
         tags:
             - { name: kernel.event_listener, event: box.state , method: onBoxChangeState}
+            - { name: kernel.event_listener, event: box_product.state , method: onProductChangeState}
+
+

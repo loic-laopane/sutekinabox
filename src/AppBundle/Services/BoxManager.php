@@ -29,7 +29,12 @@ class BoxManager
     private $translator;
 
 
-    public function __construct(Workflow $wf_box, Workflow $wf_product, ObjectManager $em, SessionInterface $session, EventDispatcherInterface $dispatcher, TranslatorInterface $translator)
+    public function __construct(Workflow $wf_box,
+                                Workflow $wf_product,
+                                ObjectManager $em,
+                                SessionInterface $session,
+                                EventDispatcherInterface $dispatcher,
+                                TranslatorInterface $translator)
     {
         $this->em = $em;
         //Todo: Creer un service pour le workflow box
@@ -99,21 +104,38 @@ class BoxManager
             $this->applyState($box, 'provisionning');
             return;
         }
+
+        if($this->wf_box->can($box, 'unvailable'))
+        {
+            //Verifier que tous les produits
+            $boxProducts = $this->getBoxProduct($box);
+            foreach($boxProducts as $boxProduct)
+            {
+                if($boxProduct->getState() == 'cancelled')
+                {
+                    $this->applyState($box, 'unvailable');
+                    return;
+                }
+            }
+        }
+
         if($this->wf_box->can($box, 'complete'))
         {
             //Verifier que tous les produits
             $boxProducts = $this->getBoxProduct($box);
             foreach($boxProducts as $boxProduct)
             {
-                if(!in_array($boxProduct->getState(), array('cancelled', 'ready')))
+                if($boxProduct->getState() !== 'ready')
                 {
-                    $this->session->getFlashBag()->add('danger', 'Le produit '.$boxProduct->getProduct()->getLabel().' est à l\'état '.$boxProduct->getState());
+                    $this->session->getFlashBag()->add('danger', 'Le produit '.$boxProduct->getProduct()->getLabel().' est à l\'état '.$this->translator->trans($boxProduct->getState()));
                     return false;
                 }
             }
             $this->applyState($box, 'complete');
             return;
         }
+
+
 
             /*
         created
