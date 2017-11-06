@@ -20,7 +20,7 @@ class ProductType extends AbstractType
                 ->add('reference', TextType::class)
                 ->add('description', TextareaType::class)
                 ->add('price', MoneyType::class)
-                ->add('image', ImageType::class)
+                ->add('image', ImageType::class, ['required'=> false])
                 ;
     }
     

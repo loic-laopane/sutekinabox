@@ -1,0 +1,11 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}{{ parent() }} :: Profil{% endblock %}
+{% block h1 %} <i class="fa fa-user"></i> Profil{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <p><input type="submit" class="btn btn-success" value="{{ 'btn.save' | trans}}"></p>
+    {{ form_end(form) }}
+{% endblock %}
