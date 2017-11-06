@@ -61,11 +61,7 @@ class BoxController extends Controller
             {
                 return $this->redirectToRoute('box_edit', array('id' => $box->getId()));
             }
-
-
-
         }
-
         return $this->render('AppBundle:Box:form.html.twig', array(
             'box' => $box,
             'form' => $form->createView(),
@@ -93,6 +89,8 @@ class BoxController extends Controller
      */
     public function manageAction(Request $request, Box $box, BoxManager $boxManager)
     {
+        if($box->getState() == 'created') return $this->redirectToRoute('box_list');
+
         $wf = $this->get('workflow.box');
         $validForm = $wf->can($box, 'request') ? $this->createValidForm($box)->createView() : false;
 
@@ -120,23 +118,28 @@ class BoxController extends Controller
      * @Method({"GET", "POST"})
      * @Security("has_role('ROLE_MARKETING')")
      */
-    public function editAction(Request $request, Box $box)
+    public function editAction(Request $request, Box $box, BoxManager $manager)
     {
         $wf = $this->get('workflow.box');
-        $deleteForm = $this->createDeleteForm($box);
-        $validForm =  $this->createValidForm($box);
+
         $editForm = $this->createForm('AppBundle\Form\BoxType', $box);
         $editForm->handleRequest($request);
+
         $can_save = $wf->can($box, 'request') ? true : false;
 
         $boxProductForm = $this->createForm(BoxProductType::class);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-            $this->get('session')->getFlashBag()->add('success', 'La box a bien été mise à jour');
-            //return $this->redirectToRoute('box_edit', array('id' => $box->getId()));
+
+            $em = $this->getDoctrine()->getManager();
+            if($manager->save($box))
+            {
+                $this->get('session')->getFlashBag()->add('success', 'La box a bien été mise à jour');
+            }
         }
 
+        $deleteForm = $this->createDeleteForm($box);
+        $validForm =  $this->createValidForm($box);
         return $this->render('AppBundle:Box:form.html.twig', array(
             'box' => $box,
             'form' => $editForm->createView(),

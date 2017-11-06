@@ -51,9 +51,24 @@ class Product
 
     /**
      * @var
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\BoxProduct", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\BoxProduct", mappedBy="product", cascade={"all"})
      */
     private $boxProduct;
+
+
+    /**
+     * @var Image
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Image", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $image;
+
+    /**
+     * @var Supplier
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Supplier")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $supplier;
 
 
     /**
@@ -169,4 +184,67 @@ class Product
         $this->suppliers = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+    /**
+     * Add boxProduct
+     *
+     * @param \AppBundle\Entity\BoxProduct $boxProduct
+     *
+     * @return Product
+     */
+    public function addBoxProduct(\AppBundle\Entity\BoxProduct $boxProduct)
+    {
+        $this->boxProduct[] = $boxProduct;
+
+        return $this;
+    }
+
+    /**
+     * Remove boxProduct
+     *
+     * @param \AppBundle\Entity\BoxProduct $boxProduct
+     */
+    public function removeBoxProduct(\AppBundle\Entity\BoxProduct $boxProduct)
+    {
+        $this->boxProduct->removeElement($boxProduct);
+    }
+
+    /**
+     * Get boxProduct
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getBoxProduct()
+    {
+        return $this->boxProduct;
+    }
+
+    /**
+     * @return Image
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param Image $image
+     * @return Product
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+        return $this;
+    }
+
+
+    public function __toString()
+    {
+        return $this->label;
+    }
+
+    public function displayName()
+    {
+        return ''.$this->getLabel()." : ".$this->getPrice().'€';
+    }
 }

@@ -23,7 +23,7 @@ class BoxProduct
 
     /**
      * @var Box
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Box", inversedBy="boxProduct")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Box", inversedBy="boxProduct", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $box;

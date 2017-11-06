@@ -10,6 +10,7 @@ namespace AppBundle\Services;
 
 
 use AppBundle\Entity\Box;
+use AppBundle\Entity\BoxProduct;
 use AppBundle\Event\BoxEvent;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -75,10 +76,33 @@ class BoxManager
         {
             $box->removeProduct($product);
         }
+
+        //vide les boxProduct
         $this->em->persist($box);
         $this->em->flush();
+
+        //On supprime la box
         $this->em->remove($box);
         $this->em->flush();
+    }
+
+    public function save(Box $box)
+    {
+
+        //Suppression des boxProduct deja associés à la box
+        $boxProducts = $this->em->getRepository('AppBundle:BoxProduct')->findByBox($box);
+        $this->cleanBoxProduct($boxProducts);
+
+        //Si la box est valide, on persist
+        if($this->isBoxValid($box))
+        {
+            $this->em->flush();
+            return true;
+        }
+        else {
+            $this->session->getFlashBag()->add('danger', 'Le coût total des produits ('.$this->getProductsCost($box).'€) dépasse le bugdet de '.$box->getBudget().'€');
+            return false;
+        }
     }
 
     /**
@@ -222,6 +246,7 @@ class BoxManager
      */
     public function getProductsCost(Box $box)
     {
+        dump($box->getBoxProduct());
         $sum = 0;
         foreach($box->getBoxProduct() as $boxProduct)
         {
@@ -230,8 +255,22 @@ class BoxManager
         return $sum;
     }
 
+    /**
+     * @param Box $box
+     * @return bool
+     */
     public function isBoxValid(Box $box)
     {
         return $this->getProductsCost($box) <= $box->getBudget();
+    }
+
+    public function cleanBoxProduct(array $boxProducts)
+    {
+        foreach($boxProducts as $boxProduct)
+        {
+            //$box->removeBoxProduct($boxProduct);
+            $this->em->remove($boxProduct);
+        }
+        $this->em->flush();
     }
 }

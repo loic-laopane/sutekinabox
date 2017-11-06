@@ -23,12 +23,13 @@ class BoxType extends AbstractType
     {
         $builder->add('name', TextType::class, ['label' => 'box.name'])
                 ->add('budget', MoneyType::class, ['label' => 'box.budget'])
-                ->add('product', EntityType::class, array(
+                ->add('products', EntityType::class, array(
                     'class' => Product::class,
                     //'label' => 'box.products',
                     'choice_label' => 'displayName',
                     'multiple' => true,
-                    'expanded' => true
+                    'expanded' => true,
+                    //'mapped' => false
                 ))
                 ;
     }

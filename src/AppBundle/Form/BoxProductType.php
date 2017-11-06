@@ -31,13 +31,5 @@ class BoxProductType extends AbstractType
         ));
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
-    {
-        return null;
-    }
-
 
 }

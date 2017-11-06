@@ -2,6 +2,8 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Entity\Supplier;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -20,6 +22,11 @@ class ProductType extends AbstractType
                 ->add('reference', TextType::class)
                 ->add('description', TextareaType::class)
                 ->add('price', MoneyType::class)
+                ->add('supplier', EntityType::class, array(
+                    'class' => Supplier::class,
+                    'choice_label' => 'society',
+                    'multiple' => true
+                ))
                 ->add('image', ImageType::class, ['required'=> false])
                 ;
     }

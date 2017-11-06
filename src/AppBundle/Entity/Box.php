@@ -58,36 +58,42 @@ class Box
     /**
      * @var
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\BoxProduct", mappedBy="box", cascade={"all"})
+     * @ORM\JoinColumn(unique=true)
      */
     private $boxProduct;
 
     private $products;
 
     // Important
-    public function getProduct()
+    public function getProducts()
     {
         $products = new ArrayCollection();
 
-        foreach($this->boxProduct as $p)
-        {
+        foreach ($this->boxProduct as $p) {
             $products[] = $p->getProduct();
         }
-
         return $products;
     }
+
     // Important
-    public function setProduct($products)
+
+    /**
+     * @param $products
+     * Replis l'ArrayCollection $boxProduct
+     */
+    public function setProducts($products)
     {
-        foreach($products as $p)
+        $this->boxProduct = new ArrayCollection();
+        foreach($products as $product)
         {
             $bp = new BoxProduct();
 
             $bp->setBox($this);
-            $bp->setProduct($p);
+            $bp->setProduct($product);
 
             $this->addBoxProduct($bp);
         }
-
+        $this->products = $products;
     }
 
     /**

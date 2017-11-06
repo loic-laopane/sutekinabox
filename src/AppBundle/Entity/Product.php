@@ -63,6 +63,13 @@ class Product
      */
     private $image;
 
+    /**
+     * @var Supplier
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Supplier")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $supplier;
+
 
     /**
      * Get id
@@ -231,7 +238,6 @@ class Product
     }
 
 
-
     public function __toString()
     {
         return $this->label;
@@ -240,5 +246,39 @@ class Product
     public function displayName()
     {
         return ''.$this->getLabel()." : ".$this->getPrice().'€';
+    }
+
+    /**
+     * Add supplier
+     *
+     * @param \AppBundle\Entity\Supplier $supplier
+     *
+     * @return Product
+     */
+    public function addSupplier(\AppBundle\Entity\Supplier $supplier)
+    {
+        $this->supplier[] = $supplier;
+
+        return $this;
+    }
+
+    /**
+     * Remove supplier
+     *
+     * @param \AppBundle\Entity\Supplier $supplier
+     */
+    public function removeSupplier(\AppBundle\Entity\Supplier $supplier)
+    {
+        $this->supplier->removeElement($supplier);
+    }
+
+    /**
+     * Get supplier
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSupplier()
+    {
+        return $this->supplier;
     }
 }

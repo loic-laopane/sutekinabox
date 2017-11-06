@@ -9,7 +9,7 @@
                 <th>Label</th>
                 <th>Reference</th>
                 <th>Description</th>
-                <th>Price</th>
+                <th>{{ 'price' | trans }}</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -40,9 +40,9 @@
         </tbody>
     </table>
 
-    <ul>
-        <li>
-            <a href="{{ path('product_new') }}">Create a new product</a>
-        </li>
-    </ul>
+
+        <p>
+            <a href="{{ path('product_new') }}" class="btn btn-primary"><i class="fa fa-plus"></i> {{ 'btn.new_product' | trans }}</a>
+        </p>
+
 {% endblock %}

@@ -49,9 +49,10 @@ btn:
     stock: En stock
     cancel: Annulation
     purchase: Commander
-    complete: Terminer
+    complete:
+    new_product: Nouveau produit
 
-
+created: Création
 available: Disponible
 unvailable: Indisponible
 requested: A traiter
@@ -67,3 +68,5 @@ cancelled: Annulé
 back_to_supplier: Retour fournisseur
 ready: Prêt pour conditionnement
 completed: Terminé
+
+price: Prix
