@@ -61,6 +61,7 @@ services:
             - '@translator'
             - '@workflow.product'
             - '@AppBundle\Services\BoxManager'
+            - '@doctrine.orm.entity_manager'
             - '%mailer_sender_address%'
         tags:
             - { name: kernel.event_listener, event: box.state , method: onBoxChangeState}

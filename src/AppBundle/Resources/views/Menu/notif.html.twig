@@ -1,0 +1,28 @@
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        <span class="badge">{{ notifications | length }}</span>
+        <i class="fa fa-bell fa-fw"></i> <i class="fa fa-caret-down"></i>
+
+    </a>
+    <ul class="dropdown-menu dropdown-alerts">
+        {% for notif in notifications %}
+            <li>
+                <a href="#">
+                    <div>
+                        <i class="fa fa-comment fa-fw"></i> {{ notif.title }}
+                        <p>{{ notif.message }}</p>
+                        <span class="pull-right text-muted small">{{ notif.createdAt | date('d/m/Y H:i') }}</span>
+                    </div>
+                </a>
+            </li>
+        {% if loop.last == false %}
+            <li class="divider"></li>
+        {% endif %}
+        {% else %}
+            <li>
+                <div><p>Aucun message</p></div>
+            </li>
+        {% endfor %}
+
+    </ul>
+</li>

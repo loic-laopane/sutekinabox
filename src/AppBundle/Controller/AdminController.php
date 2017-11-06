@@ -23,4 +23,13 @@ class AdminController extends Controller
         ));
     }
 
+    public function notificationAction()
+    {
+
+        $notifications = $this->getDoctrine()->getRepository('AppBundle:Notification')->findLastNotification($this->getUser());
+        return $this->render('AppBundle:Menu:notif.html.twig', array(
+            'notifications' => $notifications
+        ));
+    }
+
 }
