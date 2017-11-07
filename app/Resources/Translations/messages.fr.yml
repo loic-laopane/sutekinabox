@@ -70,3 +70,12 @@ ready: Prêt pour conditionnement
 completed: Terminé
 
 price: Prix
+
+Firstname: Prénom
+Lastname: Nom
+Email: Email
+Roles: Rôles
+Marketing: Marketing
+Purshasing: Achat
+Admin: Administrateur
+Supplier: Fournisseur

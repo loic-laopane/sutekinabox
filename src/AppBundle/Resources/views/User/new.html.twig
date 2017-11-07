@@ -1,0 +1,19 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}{{ parent() }} :: Utilisateur{% endblock %}
+{% block h1 %} <i class="fa fa-users"></i> Nouvel l'utilisateur{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+    {{ form_row(form.firstname) }}
+    {{ form_row(form.lastname) }}
+    {{ form_row(form.email) }}
+    {% if is_granted('ROLE_SUPERADMIN') %}
+    {{ form_row(form.roles) }}
+    {% endif %}
+    <p>
+        <input type="submit" class="btn btn-success" value="{{ 'btn.save' | trans}}">
+        <a href="{{ path('user_list') }}" class="btn btn-default">{{ 'btn.back_to_list' | trans }}</a>
+    </p>
+    {{ form_end(form) }}
+{% endblock %}

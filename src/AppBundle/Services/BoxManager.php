@@ -246,7 +246,6 @@ class BoxManager
      */
     public function getProductsCost(Box $box)
     {
-        dump($box->getBoxProduct());
         $sum = 0;
         foreach($box->getBoxProduct() as $boxProduct)
         {

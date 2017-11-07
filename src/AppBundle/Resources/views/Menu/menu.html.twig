@@ -60,6 +60,8 @@
                 <li>
                     <a href="{{ path('admin_dashboard') }}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                 </li>
+
+                {% if is_granted('ROLE_ACHAT') or is_granted('ROLE_MARKETING') %}
                 <li>
                     <a href="#"><i class="fa fa-archive fa-fw"></i> Box<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
@@ -74,8 +76,8 @@
                     </ul>
                     <!-- /.nav-second-level -->
                 </li>
-
-                {% if is_granted('ROLE_ACHAT') %}
+                {% endif %}
+                {% if is_granted('ROLE_SUPPLIER') %}
                 <li>
                     <a href="#"><i class="fa fa-wrench fa-fw"></i> Produit<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
@@ -89,6 +91,19 @@
                     <!-- /.nav-second-level -->
                 </li>
                 {% endif %}
+
+                {% if is_granted('ROLE_SUPERADMIN') %}
+                    <li>
+                        <a href="#"><i class="fa fa-wrench fa-fw"></i> Utilisateurs<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="{{ path('user_list') }}">Tous les utilisateurs</a>
+                            </li>
+                        </ul>
+                        <!-- /.nav-second-level -->
+                    </li>
+                {% endif %}
+
             </ul>
         </div>
         <!-- /.sidebar-collapse -->

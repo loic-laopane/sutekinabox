@@ -1,0 +1,93 @@
+framework:
+    workflows:
+        box:
+            type: 'workflow'
+            marking_store:
+                type: single_state
+                arguments:
+                    - state
+            supports:
+                - AppBundle\Entity\Box
+            places:
+                - created
+                - requested
+                - provisionned
+                - completed
+                - unvailable
+            transitions:
+                request:
+                    from: created
+                    to:   requested
+                provisionning:
+                    from: requested
+                    to:   provisionned
+                complete:
+                    from: provisionned
+                    to:   completed
+                unvailable:
+                    from: provisionned
+                    to: unvailable
+
+
+        product:
+            type: 'workflow'
+            marking_store:
+                type: single_state
+                arguments:
+                    - state
+            supports:
+                - AppBundle\Entity\BoxProduct
+            places:
+                - available
+                - out_of_stock
+                - cancelled
+                - requested
+                - purshased
+                - shipped
+                - remplacing
+                - received
+                - ok
+                - nok
+                - back_to_supplier
+                - ready
+
+            transitions:
+                out_of_stock:
+                    from: back_to_supplier
+                    to: out_of_stock
+                cancel:
+                    from: out_of_stock
+                    to: cancelled
+                stock:
+                    from: out_of_stock
+                    to: available
+                request:
+                    from: available
+                    to:   requested
+                purchase:
+                    from: requested
+                    to:   purshased
+                shipment:
+                    from: purshased
+                    to:   shipped
+                reshipment:
+                    from: remplacing
+                    to: shipped
+                receipt:
+                    from: shipped
+                    to: received
+                is_ok:
+                    from: received
+                    to: ok
+                is_nok:
+                    from: received
+                    to: nok
+                back_to_supplier:
+                    from: nok
+                    to: back_to_supplier
+                replace:
+                    from: back_to_supplier
+                    to: remplacing
+                complete:
+                    from: ok
+                    to:   ready

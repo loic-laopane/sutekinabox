@@ -1,7 +1,7 @@
 {% extends "::base.html.twig" %}
 
 {% block title %}{{ parent() }} :: Profil{% endblock %}
-{% block h1 %} <i class="fa fa-user"></i> Profil{% endblock %}
+{% block h1 %} <i class="fa fa-users"></i> Modifier l'utilisateur{% endblock %}
 
 {% block body %}
     {{ form_start(form) }}
@@ -11,6 +11,9 @@
     {% if is_granted('ROLE_SUPERADMIN') %}
     {{ form_row(form.roles) }}
     {% endif %}
-    <p><input type="submit" class="btn btn-success" value="{{ 'btn.save' | trans}}"></p>
+    <p>
+        <input type="submit" class="btn btn-success" value="{{ 'btn.save' | trans}}">
+        <a href="{{ path('user_list') }}" class="btn btn-default">{{ 'btn.back_to_list' | trans }}</a>
+    </p>
     {{ form_end(form) }}
 {% endblock %}

@@ -10,7 +10,7 @@
                 <a href="#">
                     <div>
                         <i class="fa fa-comment fa-fw"></i> {{ notif.title }}
-                        <p>{{ notif.message }}</p>
+
                         <span class="pull-right text-muted small">{{ notif.createdAt | date('d/m/Y H:i') }}</span>
                     </div>
                 </a>
@@ -20,7 +20,7 @@
         {% endif %}
         {% else %}
             <li>
-                <div><p>Aucun message</p></div>
+                <div class="col-md-12"><p>Aucun message</p></div>
             </li>
         {% endfor %}
 
