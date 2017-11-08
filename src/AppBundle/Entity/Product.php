@@ -3,12 +3,15 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Product
  *
  * @ORM\Table(name="product")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ProductRepository")
+ * @Serializer\ExclusionPolicy("ALL")
  */
 class Product
 {
@@ -25,6 +28,8 @@ class Product
      * @var string
      *
      * @ORM\Column(name="label", type="string", length=255)
+     * @Assert\NotBlank(message="Le label ne peut etre vide")
+     * @Serializer\Expose
      */
     private $label;
 
@@ -32,6 +37,8 @@ class Product
      * @var string
      *
      * @ORM\Column(name="reference", type="string", length=255, unique=true)
+     * @Assert\NotBlank(message="La référence ne peut etre vide")
+     * @Serializer\Expose
      */
     private $reference;
 
@@ -39,6 +46,7 @@ class Product
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=255, nullable=true)
+     *
      */
     private $description;
 
@@ -46,6 +54,8 @@ class Product
      * @var float
      *
      * @ORM\Column(name="price", type="float")
+     * @Assert\NotBlank(message="Le prix ne peut etre vide")
+     * @Serializer\Expose
      */
     private $price;
 
